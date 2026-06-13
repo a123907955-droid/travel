@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 沖繩自駕四日遊</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 FontAwesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入文青風字體 Klee One & M PLUS Rounded 1c -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 套用文青手寫風字體 */
+        body {
+            font-family: 'Klee One', 'M PLUS Rounded 1c', sans-serif;
+            background-color: #F9F6F0; /* 燕麥奶茶底色 */
+            color: #5D534A; /* 溫柔的深棕色取代純黑 */
+        }
+        
+        .timeline-container { position: relative; }
+        
+        /* 更改為虛線與柔和顏色的時間軸 */
+        .timeline-line {
+            position: absolute;
+            top: 1rem;
+            bottom: 1rem;
+            left: 1.5rem; /* 對齊 w-12 圖示的中心點 */
+            width: 2px;
+            border-left: 2px dashed #DCCDBA; /* 柔和的卡其虛線 */
+            z-index: 0;
+        }
+
+        /* 自定義滾動條讓整體更精緻 */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F9F6F0; }
+        ::-webkit-scrollbar-thumb { background: #DCCDBA; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C4B29E; }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- 頂部 Header 改為鼠尾草綠 (Sage Green) 帶溫暖感 -->
+    <header class="bg-[#9BB0A5] text-white py-10 px-6 shadow-sm rounded-b-[2.5rem] relative overflow-hidden">
+        <div class="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white opacity-10 rounded-full"></div>
+        <div class="absolute bottom-[-40px] left-[-10px] w-24 h-24 bg-white opacity-10 rounded-full"></div>
+        
+        <div class="max-w-3xl mx-auto relative z-10 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-semibold mb-3 tracking-wide">2026 沖繩自駕四日遊 <i class="fa-solid fa-leaf text-[#E9EDD9] ml-1"></i></h1>
+            <p class="text-[#E9EDD9] flex items-center justify-center md:justify-start gap-2 text-lg">
+                <i class="fa-regular fa-calendar-check"></i> 2026/06/19 - 2026/06/22
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 mt-10">
+        <!-- 分頁按鈕區 (奶茶色系) -->
+        <div id="tabs-container" class="flex space-x-3 bg-[#EFEBE0] p-1.5 rounded-2xl mb-10 overflow-x-auto shadow-inner">
+            <!-- 動態生成 -->
+        </div>
+
+        <div class="bg-white rounded-[2rem] shadow-sm border border-[#F0EBE1] p-6 sm:p-10 relative">
+            <!-- 標題裝飾 -->
+            <div class="flex items-center gap-3 mb-8 pb-4 border-b border-dashed border-[#E5DFD3]">
+                <i class="fa-solid fa-location-dot text-[#E08E79] text-xl" id="title-icon"></i>
+                <h2 id="day-title" class="text-2xl font-semibold text-[#6C635A]">
+                    <!-- 動態標題 -->
+                </h2>
+            </div>
+            
+            <div class="timeline-container space-y-4">
+                <div class="timeline-line" id="timeline-line"></div>
+                <div id="events-container" class="space-y-6 md:space-y-8 relative">
+                    <!-- 行程卡片區 (或大綱區) -->
+                </div>
+            </div>
+
+            <!-- 底部導覽按鈕區 -->
+            <div id="bottom-nav-container" class="mt-12 pt-6 border-t border-dashed border-[#E5DFD3] flex justify-between items-center">
+                <!-- 動態生成底部按鈕 -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- 行程資料 (所有景點均已加上停車與交通資訊) ---
+        const itineraryData = [
+            {
+                isSummary: true,
+                day: "Overview",
+                date: "行程大綱",
+                title: "四天三夜行程總覽",
+                highlights: [
+                    { dayTitle: "Day 1：抵達與市區之夜", icon: "fa-plane-arrival", desc: "從高雄小港機場出發，抵達沖繩那霸。入住市區飯店後，悠閒享受道地日式串燒之夜。" },
+                    { dayTitle: "Day 2：北部自駕探索", icon: "fa-car-side", desc: "市區租車出發！走訪漁市場、港川外人住宅，欣賞古宇利大橋海景，入住北部頂級度假飯店。" },
+                    { dayTitle: "Day 3：中部花海與美國村", icon: "fa-camera-retro", desc: "漫步饒平名繡球花園與恩納村萬座毛。參觀傳統琉球村，傍晚前往美國村賞夕陽、大啖頂級和牛。" },
+                    { dayTitle: "Day 4：市區觀光與歸途", icon: "fa-bag-shopping", desc: "市區還車後，前往國際通與牧志市場採買伴手禮。帶著滿滿回憶，搭機返回溫暖的高雄。" }
+                ],
+                info: [
+                    { label: "航班資訊", text: "去程 13:55 高雄起飛 ✈️ 回程 19:45 那霸起飛", icon: "fa-ticket" },
+                    { label: "交通方式", text: "D1/D4 搭乘單軌電車，D2/D3 租車自駕 (ORIX)", icon: "fa-steering-wheel" },
+                    { label: "住宿安排", text: "那霸 Almont Hotel ➔ 北部 One Suite The Grand ➔ 中部 Vessel Hotel", icon: "fa-house-chimney-window" }
+                ]
+            },
+            {
+                day: "Day 1",
+                date: "06/19 (五)",
+                title: "高雄出發 / 抵達那霸",
+                events: [
+                    { 
+                        time: "13:55 前", title: "抵達小港機場", desc: "準備搭機前往沖繩，滿心期待的出發日！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 機場設有室內外收費停車場。建議搭乘高雄捷運直達，最方便又不用擔心長途停車費唷！", link: "", icon: "fa-plane-departure", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAFbCJfXwVWPSi288VLdr7J-tLBCq2DalrHwKtE3742ws-62yCCFa2xftbBslaxPRIdyEZJX0EjMMcCcUMm-gbfrlNAmX28beiU0vjI0jFDaD1CGs2ML3M0vQJ2FwXkiof91gdI=w408-h306-k-no" 
+                    },
+                    { 
+                        time: "下午", title: "抵達那霸機場", desc: "搭乘單軌電車到「縣廳前站」下車，步行至飯店。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 機場附設 P1~P3 大型收費停車場。由於第一天尚未租車，我們直接搭乘舒適的單軌電車（Yui-Rail）前往市區，省時又環保！", link: "", icon: "fa-map-pin", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHmGp-Fv42y7hM7Jgv6NLZu_Uhz45UVWAJ2O8tuLZHSLviJFGmMztTKnYrcs-cP5e4fh5UNPjVEjv0Sdvq18qNTRZQTT2CGkLKtaHZMViJKad8cof_55S-nsQQfc5auK-ycu7JgrVH_1M57=w408-h283-k-no",
+                        transit: { text: "飛機飛行約 1 小時 50 分鐘", icon: "fa-plane" }
+                    },
+                    { 
+                        time: "下午/傍晚", title: "Almont Hotel Naha-Kenchomae", desc: "辦理入住，放下行李休息一下，再走路去吃晚餐。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 飯店提供特約立體停車場（每日約 1,500 日圓，限高 1.55m 以內，採先到先得制）。若未來開車前來或租用休旅車，可改停周邊的多個硬幣付費停車格（Coin Park）。", link: "https://maps.app.goo.gl/8RAUmYKbBpVdtzWA6", icon: "fa-bed", image: "https://global.hokke.co.jp/almont-naha/wp-content/uploads/sites/31/2019/02/facilities10.jpg",
+                        transit: { text: "單軌電車 + 步行約 20 分鐘", icon: "fa-train-tram" }
+                    },
+                    { 
+                        time: "20:45", title: "晚餐：烤雞串店 (串燒)", desc: "已訂位。從飯店步行前往，享受第一餐的日式居酒屋氛圍！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 今天步行前往即可無須開車！若有開車者，餐廳本身不提供停車，需利用周圍散落的硬幣計時停車場臨停。", link: "https://maps.app.goo.gl/rqEJ9M11vasqy9ot9", icon: "fa-utensils", image: "https://tblg.k-img.com/resize/660x370c/restaurant/images/Rvw/225885/bcefd30d09f39f373af3184a1af438cf.jpg?token=848622d&api=v2",
+                        transit: { text: "悠閒步行約 5 分鐘", icon: "fa-person-walking" }
+                    }
+                ]
+            },
+            {
+                day: "Day 2",
+                date: "06/20 (六)",
+                title: "北部自駕與古宇利島",
+                events: [
+                    { 
+                        time: "07:45", title: "離開飯店出發", desc: "去縣廳前站搭單軌電車到美榮橋站下車，再步行去 ORIX 租車店。<br><br><span class='text-[#A5B396] font-semibold'>【💡 交通提醒】</span> 步行與電車行程，無須停車。清晨散步享受沖繩乾淨的街道空氣吧！", link: "", icon: "fa-door-open",
+                        transit: { text: "路程約 10 分鐘", icon: "fa-train-tram" }
+                    },
+                    { 
+                        time: "08:00 - 08:30", title: "ORIX 美榮橋取車", desc: "辦理取車手續。準備開始自駕行程！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 租車店臨停區僅提供給取還車旅客。辦理完手續並確認車況後即可直接上路出發！", link: "", icon: "fa-key",
+                        transit: { text: "開車約 10 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "09:00 - 10:00", title: "泊港漁市場", desc: "吃早餐！蠻多生魚片、壽司、貝類等等可以吃。<br><br><span class='text-[#A5B396] font-semibold'>【💡 貼心提醒】</span> 公共位置少，可能要拿到車子上吃。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 漁市場前設有寬敞的【免費專屬平面停車場】，車位多，但清晨熱門時段人潮較多，自駕前往十分便利。", link: "", icon: "fa-fish", image: "https://placehold.co/800x400/EFEBE0/8A8177?text=Tomari+Iyumachi+Market",
+                        transit: { text: "開車約 15 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "10:15 - 11:30", title: "港川外人住宅", desc: "看這裡的店大都 10:30 後才開。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 住宅街內非常狹窄且禁止任意臨停。建議將車輛停放在聚落外圍的付費平面停車場（如港川ステイツサイドタウン停車場），再悠閒步行進去逛街。", link: "", icon: "fa-camera-retro", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHEkZ7WxggDAW_gRNX104O8VTmoH-4NnZQHh6IAp-Gok_NBe8wVfFvKOgIxj_FIYMYpwKuSUc4eKlY35u6zkgTosUco4ipvCenOwWIBuQwwRTTUZEVQm5W4klEwqFv-JiyZTzHteA=w408-h306-k-no",
+                        transit: { text: "開車約 1 小時", icon: "fa-car" }
+                    },
+                    { 
+                        time: "12:30 - 13:00", title: "許田休息站", desc: "可以購買在地產物的地方，沖繩名產像是海鹽餅乾、海葡萄通通有。<br><br><span class='text-[#A5B396] font-semibold'>【💡 貼心提醒】</span> 離開前記得去上洗手間，洗手間要稍微走一小段路。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 設有超大型【免費公共平面停車場】，臨停區車位非常充足，也是自駕北上絕佳的休息與上洗手間據點！", link: "", icon: "fa-basket-shopping", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAE2AZ-kKRcjl1qHQPJ8WzmWJfXN-e635u4bgbHbT8hdOn1y5mE-4m4vgNAFPenB9EoaBmPWvoZreEeFz3PiHSaVsOg-5qGGQzHkk6wt7H_nWltsEqyY7c1T1kdMAYQ8GaiTOkILyTSnX9Iy=w408-h306-k-no",
+                        transit: { text: "開車約 15 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "13:15 - 14:15", title: "午餐：Satchan Soba", desc: "外酥內嫩的豬肉、清甜湯頭，印象深刻的沖繩麵。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 店家前方與後方皆附設【專屬免費平面停車場】（約可停 15~25 台車），自駕客友善，不用擔心找車位問題。", link: "", icon: "fa-bowl-food", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF_8gHSe8aBrsA6Av9CL-KTokd22cy7eRnECcKyu-UyyGCBgJN7bxPA-xnBI2DD2zkIz4nOw58V7TWXfIXOBtOx8yt98eHzcD6xJWFLHle7Iji9Chs3zGVEjq3MkDO0ojhGOfwhIA=w675-h240-k-no",
+                        transit: { text: "開車約 3 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "14:15 - 15:00", title: "21世紀の森公園 星巴克", desc: "吃完午餐來附近的21世紀の森公園，還有新開幕的沖繩最靠海的星巴克！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 星巴克與21世紀之森公園共用【大型免費公共平面停車場】，車位極多、寬敞好停，還可以一邊欣賞絕美海景。", link: "", icon: "fa-mug-hot", image: "https://placehold.co/800x400/EFEBE0/8A8177?text=21st+Century+Forest+Starbucks",
+                        transit: { text: "開車約 20 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "15:20 - 15:40", title: "Shinmei Coffee", desc: "IG上面爆紅的現刨黑糖拿鐵，沖繩人氣的黑糖飲品專門店，評論很好。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 由於店家前無專用停車位，自駕來訪請將車輛在不影響交通的安全空地短暫臨停（隨行旅伴一人下車購買），或利用附近步行可達之計時停車位。", link: "", icon: "fa-coffee", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHWIZzQ8ZYlL4hT0hauTPNzTjcxPVYx1BGtQ72mHZ8YZkr2ZmRAE0rUoNCL82iBPTQI_csWyql6MO-94sfHb2uh-1DKofr-_REvlgELsoum8HnxlEgCDmSZ_7zNyZG_ehorDIFrUNDc1Ggn=w426-h240-k-no",
+                        transit: { text: "開車約 10 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "15:50 - 16:20", title: "運天森園地展望台", desc: "可以看古宇利大橋的展望台。走一小段路就能到達有涼亭的觀景台。古宇利橋的景色美極了，是放鬆身心的好去處。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 展望台附設【專屬免費小型平面停車場】（約可停 40 部車），下車步行只要走一小段石子路就能上涼亭。簡直是個隱藏的寶地，說實話，我都不想告訴別人！", link: "", icon: "fa-binoculars", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGLRn98dOt3bGFlmIejBSIgGA2mcw8gRz1cznNBq-dJlTcjG5OPKK0a4nxQ6eHe9SgJv-0YRcuUl_qJN9UcZmyA8hFAcqPlQwnTkK-tl5HJTPCx4o-wWPc5NSEqhB2RmT0xmKl3=w408-h408-k-no",
+                        transit: { text: "開車約 20 分", icon: "fa-car" }
+                    },
+                    { 
+                        time: "順路/自由", title: "古宇利海灘 + BLUE SEAL", desc: "看要順路去，還是去飯店 Check in 完再出來吃冰踏浪。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 古宇利大橋入口旁的橋下設有【免費公共停車區】；若停靠海灘入口處的私人停車場則每次約收費 500 日圓，建議先前往免費區尋找空位。", link: "", icon: "fa-ice-cream", image: "https://placehold.co/800x400/EFEBE0/8A8177?text=Kouri+Beach",
+                        transit: { text: "開車前往飯店", icon: "fa-car" }
+                    },
+                    { 
+                        time: "16:40", title: "One Suite The Grand", desc: "CHECK IN 看要不要再去附近的咖啡廳。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 飯店貼心提供住客專屬的【免費平面停車場】。Check-in 時會有親切的飯店專人前來接待引導停放。", link: "", icon: "fa-bed", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAH_C3BarR-iMx96qiKeZ7NnimM5CaVzVCbfxNGf7vda4yZArnZHs8ld7YJqyTYe8-15jbkXVUlgX9MAev1drpzDtWNLHy9o7bLdEC4ep8fkX_ZESiAEz7rR_SRX9G_fqWUtIVB6=w408-h272-k-no"
+                    }
+                ]
+            },
+            {
+                day: "Day 3",
+                date: "06/21 (日)",
+                title: "中部景點與美國村",
+                events: [
+                    { 
+                        time: "09:00", title: "出發", desc: "享受完飯店晨光，開車準備前往賞花。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 自駕準備出發。於櫃檯退房後將行李上車，車輛直接駛離飯店免費停車場即可。", link: "", icon: "fa-car" 
+                    },
+                    { 
+                        time: "09:30", title: "饒平名繡球花園", desc: "門票約500日圓。充滿夏日氣息的繡球花海。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 花園附設【專屬免費大型停車場】（約 70 個平面車位），花季人潮較多，建議遵守現場引導人員的指揮停放。", link: "", icon: "fa-camera-retro", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEBZfFCNgeDF4YjSdmDbvAcc-rLbqggcCjMEdbozcxxHJ4_wAUx-0Ji48ugnYRB1DUk8dyv1HGCfmVrrYSZdRAkii-tErZgUxfKaR7UAh8BRXLgEuK_aqhy9Ob-T4narG1h5o_AVHepsvyv=w408-h725-k-no",
+                        transit: { text: "開車約 30 分鐘 (約 20 km)", icon: "fa-car" }
+                    },
+                    { 
+                        time: "10:50", title: "萬座毛", desc: "恩納村代表性景點「象鼻岩」。上午順光最適合拍攝海景。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 萬座毛新型遊客中心前規劃有超寬敞的【大型免費平面停車場】（可停約 300 台車以上），設有殘障車位與大客車專用區，非常方便好停！", link: "", icon: "fa-water", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGPfzDZ0wke-VqA8FSqdrmnXBuddZHV5U8ZQlnlTrA3jymXqO701JYmzYza9BZ5qo2sYfvVuCPsn89kWwfZpVE-Yq2rAkwdd9mj7WNVrUnChq9NX98nZj44cRrXOZW8kUXlQhdc6lJjbK7n=w408-h306-k-no",
+                        transit: { text: "開車約 45 分鐘 (約 35 km)", icon: "fa-car" }
+                    },
+                    { 
+                        time: "11:40", title: "海鮮料理 浜の家", desc: "主打新鮮海產、招牌奶油烤魚、推薦龍蝦焗烤，補充體力！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 餐廳前方及側邊皆設有【專屬免費停車格】（約可停 30 台車），自駕前來用餐十分省心，尖峰時段建議避開正中午以免等待過久。", link: "", icon: "fa-fish", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAEj28b363eUUvjGvgpkPmgvROwnb8nZm2bKlVuzJsCWDi-lZvEvHL9ip6qvMb0QfyHRg1-MvvCcbg6ob45oqJz7koi9UqYKb11u0upDdGtRt8xBRlDTyRzUeMM3JtQ6Icl6_7It=w506-h240-k-no",
+                        transit: { text: "開車約 15 分鐘 (約 10 km)", icon: "fa-car" }
+                    },
+                    { 
+                        time: "12:45", title: "琉球村", desc: "門票2,000日圓。漫步傳統古民家，欣賞琉球舞蹈與太鼓表演。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 琉球村景區正前方即配備有【超大型免費平面停車場】，車位非常大且多，即使是自駕新手也能輕鬆停車唷！", link: "", icon: "fa-house-chimney", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAGUXNkc8RMIIijMlaGeLcpoXJJdV_tS359g7a2jIRiEhj1ILFGx7qn0C9THhZe_vZzWpJ9z43pydgBTZRzDmlQWeQNR6dZ7lZYo3juM0JDo1rKsw0ueoPAaODs1Jcpy2AKQCWY=w426-h240-k-no",
+                        transit: { text: "開車約 10 分鐘 (約 4 km)", icon: "fa-car" }
+                    },
+                    { 
+                        time: "15:15", title: "美國村 & Vessel Hotel", desc: "先 Check In。充滿異國風情的美國村適合逛街，傍晚可至落日海灘賞夕陽。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 飯店 1F 設有住客專屬的【免費專用停車場】（入住時櫃檯會提供出入消磁手續）。此外，美國村周圍也環繞著數個佔地極廣的北谷町營「免費公共停車場」，停車格無限方便！", link: "", icon: "fa-sun", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHDdNKVrjuqji8yxPT3YZiSxvoFKKri8tHyBYfut4zpAhY4J1-RR68Tp9Iu7-yTsa_zCKQHy_hN6MHA1SFi2APVOCaUeZTp-ZJrtXFyC8N0Vd5bUBKf5BiLjXGCM9eZfh0NIGL_=w408-h306-k-no",
+                        transit: { text: "開車約 30 分鐘 (約 15 km)", icon: "fa-car" }
+                    },
+                    { 
+                        time: "19:45", title: "出發吃晚餐", desc: "準備前往預定好的燒肉餐廳。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 由於晚餐地點步行即可抵達，建議將愛車安心停放在 Vessel Hotel 飯店免費停車場內，步行前往還能一邊吹著舒適的海風散步！", link: "", icon: "fa-door-open",
+                        transit: { text: "逛街兼散步前往", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "20:00", title: "晚餐：琉球的牛 北谷店", desc: "已預約 20:00 晚餐。享受頂級和牛燒肉！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 建議直接從飯店步行前往最省時省事（免去商圈塞車）。若此趟有開車前來，餐廳本身並無提供特約停車場，需就近停至美國村大型免費公用停車格中。", link: "", icon: "fa-fire-burner", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHFEAkDPTTae1KDtA-7bDD4B9Lu8BHCy4E-PwqFHpFE8GPpl8IhzcH7JJXZi1Be_LJOyRUqhjBoWUQ0KBYSPycqMwFFNA__UI61591aYl_7LNaPVq1Prp4S8_rVoyRq5NX8-Kjgsw=w408-h272-k-no",
+                        transit: { text: "步行約 10 分鐘", icon: "fa-person-walking" }
+                    }
+                ]
+            },
+            {
+                day: "Day 4",
+                date: "06/22 (一)",
+                title: "那霸市區與歸途",
+                events: [
+                    { 
+                        time: "早上", title: "飯店早餐", desc: "起床吃完早餐後，開車回那霸市區準備還車。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 吃早餐及辦理退房手續期間，車輛繼續免費停在 Vessel Hotel 的客屬平面停車場中。", link: "", icon: "fa-mug-saucer" 
+                    },
+                    { 
+                        time: "10:00", title: "ORIX 美榮橋 還車", desc: "交還車輛後自駕行程結束，準備開始市區觀光。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 請將車輛直接開進 ORIX 美榮橋還車通道（記得在還車前到附近加油站將油箱「滿油加回」並提供收據確認）。確認車況無虞，還好鑰匙就順利結案囉！", link: "", icon: "fa-car-side",
+                        transit: { text: "開車約 40 分鐘 (約 18 km)", icon: "fa-car" }
+                    },
+                    { 
+                        time: "10:30", title: "寄放行李 & 國際通觀光", desc: "寄放行李後，悠閒遊玩國際通、牧志公設市場，購買伴手禮。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 自駕行程已經結束！若仍需開車在國際通周邊，請注意國際通有特定的單行道及巴士專用道限制，建議使用周圍星羅棋布的付費硬幣計時停車場（如 Times 縣廳前，費用各異，假日通常收費較高）。", link: "", icon: "fa-bag-shopping", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAF9ZBUWsKyBLFsdteUMd5it-7D5A5IV2jT_LFXidouYCi2-YEmPxTGUnaRm9OMDegEx-PQ51d_R4awD-bZ5Dz89jyTIXvO2YMNHrI7UZQqoDPhGwadn493O6EVFWVrlCS3rbtTU=w408-h306-k-no",
+                        transit: { text: "步行約 10 分鐘至國際通", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "16:45", title: "領取行李", desc: "拿回行李，步行至美榮橋站搭單軌電車準備前往那霸機場。<br><br><span class='text-[#A5B396] font-semibold'>【💡 交通提醒】</span> 步行行程，無須停車。單軌電車不塞車，前往機場最安心準時！", link: "", icon: "fa-suitcase",
+                        transit: { text: "步行返回領取行李", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "17:30", title: "抵達那霸機場", desc: "抵達機場，準備辦理搭機報到與行李託運手續。<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 我們搭乘單軌電車（Yui-Rail）直達那霸機場站二樓，無須煩惱停車問題，直接朝航廈出境大廳前進！", link: "", icon: "fa-plane-arrival", image: "https://lh3.googleusercontent.com/gps-cs-s/APNQkAHmGp-Fv42y7hM7Jgv6NLZu_Uhz45UVWAJ2O8tuLZHSLviJFGmMztTKnYrcs-cP5e4fh5UNPjVEjv0Sdvq18qNTRZQTT2CGkLKtaHZMViJKad8cof_55S-nsQQfc5auK-ycu7JgrVH_1M57=w408-h283-k-no",
+                        transit: { text: "單軌電車約 20 分鐘", icon: "fa-train-tram" }
+                    },
+                    { 
+                        time: "19:45", title: "班機起飛", desc: "搭機返回高雄小港機場，結束美好的沖繩之旅！<br><br><span class='text-[#A5B396] font-semibold'>【🅿️ 停車資訊】</span> 飛機順利起飛，帶著滿滿伴手禮與美好的沖繩回憶，回到台灣溫暖的家，平安落地！", link: "", icon: "fa-plane",
+                        transit: { text: "機場報到、候機與免稅店購物", icon: "fa-ticket" }
+                    }
+                ]
+            }
+        ];
+
+        // 預設停留在第 0 頁 (即行程大綱)
+        let currentTab = 0;
+
+        function switchTab(index) {
+            currentTab = index;
+            renderTabs();
+            renderEvents();
+            // 切換天數後，平滑滾動回到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('tabs-container');
+            tabsContainer.innerHTML = '';
+            
+            itineraryData.forEach((day, index) => {
+                const isActive = index === currentTab;
+                const activeClasses = isActive 
+                    ? 'bg-white text-[#E08E79] shadow-sm font-semibold' 
+                    : 'text-[#8A8177] hover:bg-[#E5DFD3] hover:text-[#5D534A]';
+                
+                const btn = document.createElement('button');
+                btn.className = `flex-1 py-3 px-4 rounded-xl text-sm transition-all duration-300 whitespace-nowrap flex flex-col items-center ${activeClasses}`;
+                btn.onclick = () => switchTab(index);
+                
+                btn.innerHTML = `
+                    <span class="text-[1.1rem] mb-0.5 tracking-wide">${day.day}</span>
+                    <span class="text-[0.7rem] opacity-90">${day.date}</span>
+                `;
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function renderEvents() {
+            const dayData = itineraryData[currentTab];
+            const titleIcon = document.getElementById('title-icon');
+            document.getElementById('day-title').innerText = dayData.title;
+            
+            const eventsContainer = document.getElementById('events-container');
+            const timelineLine = document.getElementById('timeline-line');
+            eventsContainer.innerHTML = '';
+            
+            if (dayData.isSummary) {
+                timelineLine.style.display = 'none';
+                titleIcon.className = "fa-solid fa-map text-[#E08E79] text-xl";
+                
+                let infoHtml = `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">`;
+                dayData.info.forEach(info => {
+                    infoHtml += `
+                        <div class="bg-[#F4F1EA] p-4 rounded-[1rem] border border-[#EBE6DC]">
+                            <h4 class="text-[#A5B396] font-bold text-sm mb-1"><i class="fa-solid ${info.icon} mr-1.5"></i>${info.label}</h4>
+                            <p class="text-[#6C635A] text-sm leading-relaxed">${info.text}</p>
+                        </div>
+                    `;
+                });
+                infoHtml += `</div>`;
+                eventsContainer.insertAdjacentHTML('beforeend', infoHtml);
+
+                let highlightsHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">`;
+                dayData.highlights.forEach((hl, index) => {
+                    highlightsHtml += `
+                        <div class="bg-white p-5 rounded-[1.5rem] border border-[#EFEBE0] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group cursor-pointer" onclick="switchTab(${index+1})">
+                            <div class="absolute -right-6 -bottom-6 text-[#F9F6F0] opacity-50 group-hover:scale-110 transition-transform duration-500 z-0">
+                                <i class="fa-solid ${hl.icon} text-8xl"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-[1.15rem] text-[#E08E79] mb-2 tracking-wide flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-[#E08E79] text-white flex items-center justify-center text-sm shadow-sm"><i class="fa-solid ${hl.icon}"></i></div>
+                                    ${hl.dayTitle}
+                                </h3>
+                                <p class="text-[#8A8177] text-sm leading-relaxed">${hl.desc}</p>
+                                <div class="mt-4 text-[#A5B396] text-xs font-semibold flex items-center gap-1 group-hover:text-[#889779] transition-colors">
+                                    點擊查看完整行程 <i class="fa-solid fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                highlightsHtml += `</div>`;
+                eventsContainer.insertAdjacentHTML('beforeend', highlightsHtml);
+
+            } else {
+                timelineLine.style.display = 'block';
+                titleIcon.className = "fa-solid fa-location-dot text-[#E08E79] text-xl";
+
+                dayData.events.forEach((event, idx) => {
+                    let transitHtml = '';
+                    if (event.transit) {
+                        transitHtml = `
+                            <div class="relative flex items-center gap-4 sm:gap-6 my-2 sm:my-3 z-10">
+                                <div class="w-12 shrink-0 flex justify-center">
+                                    <i class="fa-solid fa-arrow-down-long text-[#DCCDBA] text-sm opacity-70"></i>
+                                </div>
+                                <div class="bg-[#F4F1EA] text-[#8C8276] border border-[#EBE6DC] shadow-sm px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+                                    <i class="fa-solid ${event.transit.icon} text-[#A5B396]"></i>
+                                    <span>${event.transit.text}</span>
+                                </div>
+                            </div>
+                        `;
+                        eventsContainer.insertAdjacentHTML('beforeend', transitHtml);
+                    }
+                    
+                    const linkClasses = event.link 
+                        ? "text-[#A5B396] hover:text-[#889779] bg-[#F1F4EE]" 
+                        : "text-[#BDB7AE] bg-[#F4F1EA] cursor-not-allowed";
+                    
+                    const linkText = event.link ? "查看 Google Maps" : "尚未新增連結";
+                    const linkTag = event.link 
+                        ? `<a href="${event.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl transition-colors ${linkClasses}"><i class="fa-solid fa-map-location-dot"></i> ${linkText}</a>`
+                        : `<span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl transition-colors ${linkClasses}"><i class="fa-solid fa-map-location-dot"></i> ${linkText}</span>`;
+
+                    const imageTag = event.image
+                        ? `<div class="mb-4 rounded-2xl overflow-hidden shadow-sm h-48 border border-[#F0EBE1]">
+                               <img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" onerror="this.onerror=null; this.src='https://placehold.co/800x400/EFEBE0/8A8177?text=Image+Not+Found';">
+                           </div>`
+                        : '';
+
+                    const eventHtml = `
+                        <div class="relative flex items-start gap-4 sm:gap-6 group">
+                            
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#F9F6F0] bg-[#E08E79] text-white shadow-sm shrink-0 relative z-10 transition-transform group-hover:scale-110 duration-300">
+                                <i class="fa-solid ${event.icon} text-lg"></i>
+                            </div>
+                            
+                            <div class="flex-1 bg-white p-5 rounded-[1.5rem] border border-[#EFEBE0] shadow-sm hover:shadow-md transition-shadow">
+                                ${imageTag}
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-bold text-[#A5B396] text-sm bg-[#F1F4EE] px-2.5 py-1 rounded-lg">
+                                        <i class="fa-regular fa-clock mr-1"></i> ${event.time}
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-[1.15rem] text-[#6C635A] mb-2 tracking-wide">${event.title}</h3>
+                                <p class="text-[#8A8177] text-sm leading-relaxed mb-5">
+                                    ${event.desc}
+                                </p>
+                                ${linkTag}
+                            </div>
+                        </div>
+                    `;
+                    eventsContainer.insertAdjacentHTML('beforeend', eventHtml);
+                });
+            }
+            
+            renderBottomNav();
+        }
+
+        function renderBottomNav() {
+            const bottomNav = document.getElementById('bottom-nav-container');
+            bottomNav.innerHTML = '';
+
+            let prevBtnHtml = '<div class="w-[30%]"></div>'; 
+            if (currentTab > 0) {
+                const prevData = itineraryData[currentTab - 1];
+                const prevText = prevData.isSummary ? '大綱' : prevData.day;
+                prevBtnHtml = `
+                    <div class="w-[30%] flex justify-start">
+                        <button onclick="switchTab(${currentTab - 1})" class="flex items-center gap-2 text-[#8A8177] hover:text-[#E08E79] transition-colors font-semibold text-sm">
+                            <i class="fa-solid fa-chevron-left text-xs"></i> 回到${prevText}
+                        </button>
+                    </div>
+                `;
+            }
+
+            let nextBtnHtml = '<div class="w-[30%]"></div>'; 
+            if (currentTab < itineraryData.length - 1) {
+                const nextData = itineraryData[currentTab + 1];
+                nextBtnHtml = `
+                    <div class="w-[30%] flex justify-end">
+                        <button onclick="switchTab(${currentTab + 1})" class="flex items-center gap-2 bg-[#A5B396] text-white px-5 py-2.5 rounded-full hover:bg-[#889779] transition-colors shadow-sm font-semibold text-sm">
+                            前往 ${nextData.day} <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            let topBtnHtml = `
+                <div class="w-[40%] flex justify-center">
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1.5 text-[#DCCDBA] hover:text-[#E08E79] transition-colors font-semibold text-xs group">
+                        <div class="w-10 h-10 rounded-full border-[2px] border-[#DCCDBA] group-hover:border-[#E08E79] bg-white flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
+                            <i class="fa-solid fa-arrow-up text-lg"></i>
+                        </div>
+                        <span class="tracking-wider">Top</span>
+                    </button>
+                </div>
+            `;
+
+            bottomNav.innerHTML = prevBtnHtml + topBtnHtml + nextBtnHtml;
+        }
+
+        renderTabs();
+        renderEvents();
+    </script>
+</body>
+</html>
