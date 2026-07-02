@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冰島北部與西部深度探索：七日精彩行程導覽</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen">
+
+<script>
+/* 原本的 itineraries, practicalInfo, attractions, allLocations 保留不動 */
+const itineraries = {
+			"Day1": {
+				date: "8月30日 (星期六)",
+				title: "抵達冰島與行前準備",
+				carDistance: "🚗 少量移動",
+				highlights: ["取車", "超市採買"],
+				routeMap: "https://www.google.com/maps/search/Reykjavik+Car+Rental,+Supermarket",
+				plan: [
+				  { time: "17:00", location: "取車", drive: null, stay: null, description: "抵達後領取租車", reason: "為冰島自駕旅程做準備。", mapUrl: "https://maps.google.com/?q=Keflavik+Car+Rental" },
+				  { time: "18:00", location: "吃晚餐", drive: null, stay: null, description: "可選擇雷克雅維克市區餐廳", reason: "抵達後補充體力。", mapUrl: "https://maps.google.com/?q=Reykjavik+restaurant" },
+				  { time: "19:30", location: "採買", drive: null, stay: null, description: "前往 Bonus / Krónan 超市購買食材", reason: "為後續的自駕行程儲備糧食。", mapUrl: "https://maps.google.com/?q=Bonus+supermarket+Reykjavik" }
+				]
+			  },
+			"Day2": {
+				date: "8月31日 (星期日)",
+				title: "雷克雅維克市區探索與溫泉體驗",
+				carDistance: "🚶 主要步行，Sky Lagoon 車程 10 分鐘",
+				highlights: ["Hallgrímskirkja 教堂", "Laugavegur 購物街", "Harpa 音樂廳", "Tjörnin 湖", "Sky Lagoon"],
+				routeMap: "https://www.google.com/maps/dir/Hallgrímskirkja/Laugavegur/Harpa+Concert+Hall/Tjörnin/Sky+Lagoon",
+				plan: [
+				  { time: "08:00", location: "早餐", drive: null, stay: "1 小時", description: "可前一晚買好在住處吃或出門外食", reason: "補充一天的能量。", mapUrl: null },
+				  { time: "09:00", location: "Hallgrímskirkja 教堂", drive: "30 分", stay: "30 分", description: "可登塔俯瞰市區，建議提前購票", reason: "欣賞雷克雅維克的標誌性建築並俯瞰城市全景。", mapUrl: "https://maps.google.com/?q=Hallgrímskirkja" },
+				  { time: "09:30", location: "Laugavegur 購物街", drive: null, stay: "45 分", description: "沿途欣賞街頭塗鴉、小店", reason: "感受冰島首都的文創氛圍。", mapUrl: "https://maps.google.com/?q=Laugavegur+Reykjavik" },
+				  { time: "10:15", location: "咖啡時間", drive: null, stay: "45 分", description: "Sandholt 麵包店 / Reykjavík Roasters", reason: "在探索城市之餘，享受一杯咖啡。", mapUrl: "https://maps.google.com/?q=Sandholt+Reykjavik" },
+				  { time: "11:00", location: "Bankastræti & Austurstræti", drive: null, stay: "1 小時", description: "冰島設計品牌與紀念品店", reason: "尋找獨特的冰島設計品和紀念品。", mapUrl: "https://maps.google.com/?q=Bankastræti+Reykjavik" },
+				  { time: "12:00", location: "午餐", drive: null, stay: "1 小時", description: "品嚐冰島特色餐點", reason: "體驗當地美食文化。", mapUrl: null },
+				  { time: "13:00", location: "Harpa 音樂中心", drive: null, stay: "45 分", description: "玻璃蜂巢建築，入內參觀拍照", reason: "欣賞獨特的建築美學。", mapUrl: "https://maps.google.com/?q=Harpa+Concert+Hall+Reykjavik" },
+				  { time: "13:45", location: "Tjörnin 湖 & 市政廳", drive: null, stay: "45 分", description: "湖畔散步、市政廳立體地圖", reason: "在市中心享受寧靜的湖畔時光。", mapUrl: "https://maps.google.com/?q=Tjörnin+Reykjavik" },
+				  { time: "14:30", location: "Skólavörðustígur 文青小巷", drive: null, stay: "45 分", description: "探訪文青小店與塗鴉牆", reason: "探索雷克雅維克的藝術角落。", mapUrl: "https://maps.google.com/?q=Skólavörðustígur+Reykjavik" },
+				  { time: "15:30", location: "下午茶", drive: null, stay: "30 分", description: "Café Loki 傳統甜點 / Brauð & Co 可頌", reason: "品嚐道地的冰島甜點。", mapUrl: "https://maps.google.com/?q=Café+Loki+Reykjavik" },
+				  { time: "16:00", location: "超市採買", drive: null, stay: "1 小時", description: "補充隔日所需食材", reason: "為隔天的黃金圈之旅做準備。", mapUrl: "https://maps.google.com/?q=Bonus+supermarket+Reykjavik" },
+				  { time: "17:00", location: "晚餐", drive: null, stay: "1.5 小時", description: "", reason: "晚餐時間。", mapUrl: null },
+				  { time: "19:30", location: "Sky Lagoon", drive: "10 分", stay: "2 小時", description: "雷克雅維克近郊海景溫泉", reason: "在海景溫泉中放鬆身心。", mapUrl: "https://maps.google.com/?q=Sky+Lagoon+Reykjavik" }
+				]
+			  },
+			"Day3": {
+				date: "9月1日 (星期一)",
+				title: "黃金圈經典之旅",
+				carDistance: "🚗 車程約 3 小時",
+				highlights: ["Þingvellir 國家公園", "Brúarfoss", "Strokkur 間歇泉", "Gullfoss 瀑布"],
+				routeMap: "https://www.google.com/maps/dir/Thingvellir+National+Park/Brúarfoss/Strokkur/Gullfoss/Hveragerdi",
+				plan: [
+				  { time: "09:00", location: "雷克雅維克 → Þingvellir", drive: "45 分", stay: null, description: "車程 45 分鐘", reason: "前往黃金圈的第一站。", mapUrl: "https://maps.google.com/?q=Thingvellir+National+Park" },
+				  { time: "09:45", location: "Þingvellir 國家公園", drive: null, stay: "3 小時", description: "Hakið 景觀台、Silfra 裂谷、Öxarárfoss 瀑布", reason: "探索歐亞與北美板塊的交界處，感受獨特地質景觀。", mapUrl: "https://maps.google.com/?q=Thingvellir+National+Park" },
+				  { time: "12:45", location: "午餐 @ Laugarvatn", drive: null, stay: "1 小時", description: "Lindin 餐廳", reason: "在黃金圈的中心點享受午餐。", mapUrl: "https://maps.google.com/?q=Lindin+Restaurant+Laugarvatn" },
+				  { time: "13:45", location: "前往 Brúarfoss", drive: "25 分", stay: null, description: "藍色秘境瀑布", reason: "探訪隱藏的藍色瀑布。", mapUrl: "https://maps.google.com/?q=Brúarfoss" },
+				  { time: "14:40", location: "前往 Strokkur 間歇泉", drive: "20 分", stay: null, description: "", reason: "前往下一個黃金圈景點。", mapUrl: "https://maps.google.com/?q=Strokkur+Geyser" },
+				  { time: "15:00", location: "Strokkur 間歇泉", drive: null, stay: "40 分", description: "觀察地熱噴泉", reason: "近距離觀賞壯觀的間歇泉噴發。", mapUrl: "https://maps.google.com/?q=Strokkur+Geyser" },
+				  { time: "15:50", location: "Gullfoss 瀑布", drive: "10 分", stay: "40 分", description: "雙層瀑布，天氣好可見彩虹", reason: "欣賞冰島最著名的瀑布之一。", mapUrl: "https://maps.google.com/?q=Gullfoss" },
+				  { time: "16:30", location: "前往 Hveragerði", drive: "1 小時", stay: null, description: "住宿或晚餐", reason: "結束黃金圈行程，前往住宿點。", mapUrl: "https://maps.google.com/?q=Hveragerdi" }
+				]
+			  },
+			"Day4": {
+				date: "9月2日 (星期二)",
+				title: "南岸瀑布與黑沙灘",
+				carDistance: "🚗 車程約 3.5 小時",
+				highlights: ["Seljalandsfoss", "Skógafoss", "Dyrhólaey", "Reynisfjara 黑沙灘"],
+				routeMap: "https://www.google.com/maps/dir/Seljalandsfoss/Gljúfrabúi/Skógafoss/Kvernufoss/Dyrhólaey/Reynisfjara/Vík",
+				plan: [
+				  { time: "09:00", location: "Hveragerði → Seljalandsfoss", drive: "1 小時", stay: null, description: "車程 1 小時", reason: "開始南岸景點探索。", mapUrl: "https://maps.google.com/?q=Seljalandsfoss" },
+				  { time: "10:00", location: "Seljalandsfoss", drive: null, stay: "45 分", description: "可走進瀑布後方", reason: "從瀑布後方欣賞水簾的獨特景觀。", mapUrl: "https://maps.google.com/?q=Seljalandsfoss" },
+				  { time: "10:45", location: "Gljúfrabúi", drive: null, stay: "40 分", description: "隱藏瀑布，需涉水", reason: "探訪隱藏在峽谷中的秘境瀑布。", mapUrl: "https://maps.google.com/?q=Gljúfrabúi" },
+				  { time: "12:00", location: "Skógafoss", drive: "35 分", stay: "45 分", description: "彩虹瀑布，上方觀景台", reason: "欣賞壯觀的彩虹瀑布，可登上階梯俯瞰全景。", mapUrl: "https://maps.google.com/?q=Skógafoss" },
+				  { time: "13:45", location: "Kvernufoss", drive: "20 分", stay: "45 分", description: "輕鬆步道，可走入瀑布後方", reason: "體驗另一座可以走到瀑布後方的瀑布。", mapUrl: "https://maps.google.com/?q=Kvernufoss" },
+				  { time: "14:50", location: "Dyrhólaey", drive: "20 分", stay: "40 分", description: "懸崖與海蝕門", reason: "欣賞壯麗的海蝕拱門和懸崖。", mapUrl: "https://maps.google.com/?q=Dyrhólaey" },
+				  { time: "15:40", location: "Reynisfjara 黑沙灘", drive: "10 分", stay: "50 分", description: "玄武岩六角柱、海蝕拱門", reason: "漫步在著名的黑沙灘，欣賞玄武岩柱的奇特景觀。", mapUrl: "https://maps.google.com/?q=Reynisfjara" },
+				  { time: null, location: "晚餐", drive: null, stay: null, description: "Vík 餐廳，例如 Suður-Vík、Smiðjan Brugghús、The Soup Company", reason: "結束一天的行程，在維克小鎮享用晚餐。", mapUrl: "https://maps.google.com/?q=Vík" }
+				]
+			  },
+			"Day5": {
+				date: "9月3日 (星期三)",
+				title: "冰川健行與冰河湖",
+				carDistance: "🚗 車程約 4 小時",
+				highlights: ["Skaftafell 冰川健行", "Jökulsárlón", "Diamond Beach"],
+				routeMap: "https://www.google.com/maps/dir/Skaftafell/Jökulsárlón/Diamond+Beach/Höfn",
+				plan: [
+				  { time: "08:00", location: "Skaftafell Base Camp", drive: "2 小時", stay: null, description: "車程約 2 小時", reason: "前往冰川健行的集合地點。", mapUrl: "https://maps.google.com/?q=Skaftafell+Base+Camp" },
+				  { time: "10:40", location: "冰川健行", drive: null, stay: "6 小時", description: "需提前抵達，自備午餐", reason: "體驗在冰川上行走的獨特活動。", mapUrl: "https://maps.google.com/?q=Skaftafell+Base+Camp" },
+				  { time: "17:30", location: "Jökulsárlón & Diamond Beach", drive: "45 分", stay: "45 分", description: "冰河湖、黑沙灘冰塊", reason: "欣賞冰河湖的浮冰與鑽石沙灘的奇景。", mapUrl: "https://maps.google.com/?q=Jökulsárlón" },
+				  { time: null, location: "晚餐", drive: null, stay: null, description: "Pakkhús Restaurant 龍蝦餐（建議先用餐再 check-in）", reason: "在霍芬享用美味的龍蝦大餐。", mapUrl: "https://maps.google.com/?q=Pakkhús+Restaurant+Höfn" }
+				]
+			  },
+			"Day6": {
+				date: "9月4日 (星期四)",
+				title: "東部峽灣小鎮探索",
+				carDistance: "🚗 車程約 4 小時",
+				highlights: ["Vestrahorn", "Gufufoss", "Seyðisfjörður 彩虹街"],
+				routeMap: "https://www.google.com/maps/dir/Vestrahorn/Gufufoss/Seyðisfjörður",
+				plan: [
+				  { time: "10:00", location: "Höfn → Vestrahorn", drive: "20 分", stay: null, description: "車程 20 分鐘", reason: "前往著名的攝影景點。", mapUrl: "https://maps.google.com/?q=Vestrahorn" },
+				  { time: "10:20", location: "Vestrahorn", drive: null, stay: "1 小時", description: "經典攝影地點", reason: "捕捉 Vestrahorn 山脈在水中倒影的壯麗景色。", mapUrl: "https://maps.google.com/?q=Vestrahorn" },
+				  { time: "11:20", location: "前往 Egilsstaðir", drive: "3 小時", stay: null, description: "午餐車上解決，行經峽灣路", reason: "沿著東部峽灣的蜿蜒公路前行。", mapUrl: "https://maps.google.com/?q=Gufufoss" },
+				  { time: "14:20", location: "Egilsstaðir", drive: null, stay: "1 小時", description: "超市採買", reason: "明天自煮食材", mapUrl: "https://maps.app.goo.gl/naGncg8ivWWB8dxf8" },
+				  { time: "16:00", location: "Gufufoss", drive: "30 分", stay: "20 分", description: "27m 瀑布，水氣濃厚", reason: "欣賞這個氣勢磅礴的瀑布。", mapUrl: "https://maps.google.com/?q=Gufufoss" },
+				  { time: "16:40", location: "Seyðisfjörður 小鎮", drive: "20 分", stay: "2 小時", description: "彩虹街、教堂、藝術品店", reason: "漫步在如詩如畫的彩虹街，感受小鎮的藝術氛圍。", mapUrl: "https://maps.google.com/?q=Seyðisfjörður" }
+				]
+			  },
+			D7_0905: {
+                date: '9月5日 (星期五)',
+                title: '北冰島地貌奇觀之旅',
+                carDistance: '約 4 小時 (276 公里)',
+                highlights: '玄武岩峽谷、歐洲最大瀑布、地熱谷',
+				routeMap: "https://maps.app.goo.gl/yWwqGRXXypuxWjc3A",
+                plan: [
+                    { time: '09:30', location: 'Rjúkandi Waterfall', drive: '1 小時', stay: '30 分', description: '較少人知道但風景優美的瀑布，水流從玄武岩柱間傾瀉而下，形成多個層次，環境靜謐。', reason: '體驗一份獨特的寧靜美，是通往斯圖拉石峽谷途中的不錯停留點。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Rjúkandafoss%20Parking' },
+                    { time: '10:30', location: 'Stuðlagil 玄武岩峽谷', drive: '23 分', stay: '2 小時', description: '近年竄紅的秘境，擁有獨特壯觀的玄武岩柱群，峽谷中流淌著藍綠色的 Jökulsá á Dal 河。', reason: '冰島最令人驚嘆的地質奇觀之一，河水顏色夢幻，非常適合攝影。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Parking%20Klaustrusel%20-%20Stuðlagil' },
+                    { time: '14:30', location: 'Dettifoss (West Side)', drive: '1 小時 45 分', stay: '30 分', description: '歐洲水量最大的瀑布，氣勢磅礴，聲勢震耳欲聾。西岸觀景點更容易到達。', reason: '冰島必訪的瀑布之一，感受大自然最原始的力量與震撼力。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Dettifoss%20Parking%20West' },
+                    { time: '15:15', location: 'Selfoss', drive: '步行 15 分', stay: '30 分', description: '黛提瀑布上游，水流更寬闊、分散，有種柔和的壯闊感。', reason: '一次性領略不同風格的瀑布，感受冰島水流的千變萬化。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Selfoss%20Waterfall' },
+                    { time: '16:00', location: 'Hafragilsfoss', drive: '5 分', stay: '30 分', description: '黛提瀑布下游，從高處俯瞰峽谷和瀑布，視野開闊。', reason: '提供黛提瀑布區域的另一種視角，感受峽谷的宏偉。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hafragilsfoss%20West%20Parking' },
+                    { time: '17:00', location: 'Hverir地熱谷', drive: '30 分', stay: '2 小時', description: '活躍的地熱區，噴湧著滾燙的泥漿池和蒸汽孔，硫磺氣味濃烈，色彩斑斕如同火星表面。', reason: '近距離感受冰島強大的地熱活動，體驗如同置身異星球般的獨特地貌。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hverir%20Parking' },
+                    { time: '19:00', location: '住宿:Hlid Cottages Mývatn', drive: '10 分', stay: null, description: '位於米湖區域，方便第二天繼續探索米湖周邊景點。', reason: '方便的住宿地點，為米湖深度探索做好準備。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hlid%20Cottages%20Mývatn' },
+                ],
+            },
+            D8_0906: {
+                date: '9月6日 (星期六)',
+                title: '米湖區地質與生態探索',
+                carDistance: '約 2 小時 5 分 (125 公里)',
+                highlights: '火山火山口、地熱洞穴、假火山口群、鯨魚小鎮',
+				routeMap: "https://maps.app.goo.gl/B2G3eJnhMvKcvPKXA",
+                plan: [
+                    { time: '09:00', location: 'Krafla火山口湖 Viti', drive: '20 分', stay: '1 - 2 小時', description: '克拉夫拉火山區的藍綠色火山口湖，周圍是紅色火山岩，可環湖步行。', reason: '火山口湖顏色鮮明，是冰島火山活動的直觀體現，風景如畫。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Viti%20Crater%20(Krafla)%20Parking' },
+                    { time: '10:45', location: 'Grjotagja', drive: '15 分', stay: '30 分', description: '隱秘的地熱洞穴，洞內有溫泉水，曾是《權力遊戲》取景地，氛圍神秘。', reason: '體驗冰島獨特的地下溫泉景觀，感受《權力遊戲》的魅力。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Parking%20for%20Grojotagja%20cave' },
+                    { time: '11:25', location: 'Hverfjall(惠爾偽火山口)', drive: '14 分', stay: '2 小時', description: '冰島最大的火山渣環形山之一，可登上頂部俯瞰米湖地區全景。', reason: '登上頂部可獲得 360 度的壯麗景色，將米湖周邊地貌盡收眼底。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hverfjall%20Parking' },
+                    { time: '13:35', location: '午餐:牛棚餐廳 Vogafjós', drive: '10 分', stay: '1 小時', description: '位於米湖邊的特色餐廳，直接看到牛棚，享用新鮮當地食材。', reason: '體驗冰島農場特色餐飲，食物新鮮美味，環境獨特。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Vogafjós%20Farm%20Resort' },
+                    { time: '14:40', location: 'Lava Field Dimmuborgir', drive: '6 分', stay: '0.5 ~ 2 小時 (取決於拍照)', description: '巨大的熔岩柱和熔岩拱門組成的區域，形狀各異，如同傳說中的精靈城堡。', reason: '感受冰島獨特的火山地貌，熔岩奇石壯觀，充滿神秘感。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Lava%20field%20Dimmuborgir' },
+                    { time: '16:25', location: 'Skútustaðagígar 假火山口群', drive: '12 分', stay: '0.5 ~ 1 小時', description: '位於米湖西南岸，由水蒸氣爆炸形成的假火山口，倒映湖中景色優美。', reason: '獨特的火山地貌，倒影在湖水中景色優美，是拍攝米湖風光的好地方。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Mývatn%20Visitor%20Center' },
+                    { time: '17:55', location: 'Húsavík Whale Museum(原則上會放在隔天)', drive: '50 分', stay: '1 小時', description: '胡薩維克是冰島著名的「歐洲觀鯨之都」，博物館介紹鯨魚生態。', reason: '深入了解鯨魚，或為隔天的觀鯨行程做知識儲備。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=胡薩維克鯨魚博物館' },
+                    { time: '19:00', location: 'Husavil小鎮港口散步', drive: '1 分', stay: null, description: '港口風景優美，有許多觀鯨船停泊，可感受小鎮悠閒氛圍。', reason: '提前感受觀鯨小鎮的魅力，為隔天的觀鯨行程熱身。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Husavil%20小鎮港口' },
+                    { time: '19:35', location: '住宿:Bjarnabúð', drive: null, stay: null, description: '方便第二天在胡薩維克參加觀鯨或探索小鎮。', reason: '便於第二天進行觀鯨活動或深度探索胡薩維克。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Bjarnabúð' },
+                ],
+            },
+            D9_0907: {
+                date: '9月7日 (星期日)',
+                title: '胡薩維克觀鯨與阿克雷里城市探索',
+                carDistance: '約 1 小時 56 分 (136 公里)',
+                highlights: '眾神瀑布、阿克雷里市區、極地植物園',
+				routeMap: "https://maps.app.goo.gl/P7YFWErUvafv8Bp46",
+                plan: [
+                    { time: '08:30', location: 'Húsavík 港口漁村晨景+胡薩維克鯨魚博物館', drive: '步行', stay: '1.5 小時', description: '清晨的漁村港口寧靜，可感受小鎮風情；觀鯨是冰島最佳體驗之一。', reason: '體驗冰島北部漁村魅力，有機會近距離接觸海洋巨獸，或了解其生態。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=胡薩維克鯨魚博物館' },
+                    { time: '10:40', location: 'Goðafoss 瀑布', drive: '40 分', stay: '30 分', description: '冰島最美麗的瀑布之一，形狀像巨大馬蹄形，背後有歷史文化故事。', reason: '瀑布景觀獨特壯麗，是冰島黃金圈之外不可錯過的經典瀑布。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Goðafoss%20East%20Bank%20Parking' },
+                    { time: '12:00', location: 'Akureyri 市中心午餐', drive: '50 分', stay: null, description: '冰島北部的最大城市，有「北方之都」美譽，市中心有各種商店餐廳。', reason: '感受冰島不同於自然風光的城市氛圍，品嚐當地美食。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Akureyri' },
+                    { time: '13:30', location: '市區逛街 + Akureyrarkirkja 教堂', drive: '步行', stay: '1.5 小時', description: '阿克雷里的標誌性建築，有獨特的現代設計，周邊可逛街。', reason: '欣賞城市地標建築，感受城市脈動，享受休閒購物時光。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=阿克雷里大教堂' },
+                    { time: '15:00', location: '極地植物園（Botanical Garden)參觀', drive: '步行', stay: '1 小時', description: '極地植物園種植耐寒植物，港口和森林步道適合悠閒散步。', reason: '親近自然、放鬆身心，感受冰島北部城市綠色空間的魅力。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Akureyri%20Botanical%20Garden' },
+                    { time: '16:00', location: '超市採買、加油 ', drive: '10 分', stay: '1.5 小時', description: '在大城市補給是明智選擇，Bonus 超市物價相對友好。', reason: '為接下來的旅程儲備物資，確保車輛油料充足，為長途駕駛做準備。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Bonus%20超市%20Akureyri' },
+                    { time: '18:00', location: '住宿:Waterfront Fjord House', drive: '30 分', stay: null, description: '靠近阿克雷里市區，提供舒適住宿環境。', reason: '舒適的住宿點，便於休息，準備下一段旅程。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Waterfront%20Fjord%20House' },
+                ],
+            },
+            D10_0908: {
+                date: '9月8日 (星期一)',
+                title: '西冰島歷史與自然風光',
+                carDistance: '約 4 小時 30 分 (338 公里)',
+                highlights: '獨特海濱泳池、傳統草皮屋、巨人峽谷瀑布',
+				routeMap: "https://maps.app.goo.gl/5yD9zuR9vqC1XPm28",
+                plan: [
+                    { time: '10:10', location: 'Hofsós 小鎮', drive: '1 小時 40 分', stay: '1 小時', description: '海濱小鎮，以其面向峽灣的獨特泳池而聞名，可一邊游泳一邊欣賞美景。', reason: '如果天氣允許，無邊泳池是獨一無二的體驗，即使不游泳小鎮景色也很不錯。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Hofsós' },
+                    { time: '11:50', location: 'Glaumbær Turf Farm & Museum', drive: '40 分', stay: '1 小時', description: '保存完好的傳統冰島草皮屋農場，展示18-19世紀冰島人生活方式。', reason: '深入了解冰島傳統建築和文化歷史，感受過去冰島人的生活情境。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Glaumbær%20Turf%20Farm%20%26%20Museum' },
+                    { time: '13:30', location: 'Blönduós 午餐＋小鎮散步', drive: '40 分', stay: '1.5 小時', description: '位於冰島一號公路沿線的小鎮，適合中途休息、用餐。', reason: '作為旅途中的補給點，可以休息，享受午餐，體驗冰島小鎮的悠閒生活。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blönduós' },
+                    { time: '15:35', location: 'Kolugljúfur(巨人峽谷)', drive: '35 分', stay: '45 分', description: '峽谷中流淌著 Kolugljúfur 瀑布，水流從玄武岩柱間落下，景色壯觀。', reason: '相對小眾但景色震撼的峽谷和瀑布組合，是攝影的好地方。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Kolugljufur%20Car%20Park' },
+                    { time: '17:30', location: '住宿:Borgir', drive: '1 小時', stay: null, description: '為第二天前往斯奈山半島做準備。', reason: '位於西部，方便第二天行程的銜接。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Borgir%20Guesthouse' },
+                ],
+            },
+            D11_0909: {
+                date: '9月9日 (星期二)',
+                title: '斯奈山半島南岸精華',
+                carDistance: '約 5 小時 30 分 (396 公里)',
+                highlights: '教會山、金色沙灘、黑色燈塔',
+				routeMap: "https://maps.app.goo.gl/m6ztdFQ5xVnqhd8i7",
+                plan: [
+                    { time: '09:30', location: 'Grábrók 火山口', drive: '1 小時', stay: '45 分', description: '火山噴發後形成的環形山，可輕鬆登上頂部，俯瞰周圍熔岩地貌。', reason: '輕鬆登頂，視野開闊，是欣賞冰島火山地貌的便捷方式。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Grábrók%20Parking' },
+                    { time: '11:00', location: 'Barnafoss & Hraunfossar 瀑布群', drive: '45 分', stay: '45 分', description: 'Hraunfossar 水流從多孔熔岩滲出，Barnafoss 水流湍急，風格截然不同。', reason: '兩種風格截然不同的瀑布，Hraunfossar 的獨特地質景觀令人驚嘆。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Barnafoss%20%26%20Hraunfossar%20瀑布群' },
+                    { time: '13:45', location: 'Grundarfjörður 小鎮 + 午餐', drive: '2 小時', stay: '1 小時 15 分', description: '位於斯奈山半島北岸的寧靜漁村，是前往教會山的必經之路。', reason: '在前往著名景點之前，可以在這裡補充體力，感受漁村的寧靜氛圍。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Grundarfjörður%20小鎮' },
+                    { time: '15:05', location: 'Kirkjufellsfoss & Kirkjufell 山 (教會山與教會山瀑布)', drive: '5 分', stay: '45 分', description: '冰島標誌性地標，獨特錐形，瀑布是拍攝教會山倒影的最佳角度。', reason: '明信片般的風景，冰島旅行必打卡地之一，無論白天夜晚都壯觀。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Kirkjufell%20山' },
+                    { time: '16:25', location: 'Skarðsvík Golden Beach (金色沙灘)', drive: '35 分', stay: '30 分', description: '冰島少見的金色沙灘，與常見的黑沙灘形成鮮明對比，海水清澈。', reason: '體驗冰島獨特的沙灘風貌，尤其在陽光下，金色沙灘非常吸引人。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Skarðsvík%20Golden%20Beach' },
+                    { time: '17:05', location: 'Svörtuloft Lighthouse (黑色燈塔)', drive: '10 分', stay: '30 分', description: '橘色燈塔矗立在黑色懸崖之上，面對浩瀚大西洋，海鳥眾多。', reason: '燈塔與黑色懸崖、湛藍海水構成鮮明畫面，是拍照的絕佳地點。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Svörtuloft%20Lighthouse' },
+                    { time: '18:05', location: 'Ólafsvík 小鎮', drive: '30 分', stay: '1 小時', description: '斯奈山半島上的一個漁港小鎮，觀鯨和海鳥觀賞的熱門出發點。', reason: '在這裡休息，感受漁村生活，為接下來的住宿做準備。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Ólafsvík%20小鎮' },
+                    { time: '19:35', location: '住宿：Kirkjufell Guesthouse', drive: '30 分', stay: null, description: '靠近教會山，方便第二天繼續探索半島。', reason: '位置優越，便於第二天探索斯奈山半島的剩餘景點。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Kirkjufell%20Guesthouse' },
+                ],
+            },
+            D12_0910: {
+                date: '9月10日 (星期三)',
+                title: '斯奈山半島南岸與返回雷克雅維克途中',
+                carDistance: '約 3 小時 45 分 (272 公里)',
+                highlights: '黑色教堂、玄武岩石柱、海豹沙灘',
+				routeMap: "https://maps.app.goo.gl/YWmzySxfAU9zVDjT8",
+                plan: [
+                    { time: '09:10', location: 'Búðir 黑教堂', drive: '40 分', stay: '30 分', description: '斯奈山半島標誌性景點，黑色木製教堂，在熔岩地和海岸線襯托下獨特神秘。', reason: '極簡而富有美感的建築，與冰島蒼茫的自然景色形成強烈對比。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Búðir%20黑教堂' },
+                    { time: '10:10', location: 'Malarrif Lighthouse & Lóndrangar 巨石柱', drive: '30 分', stay: '30 分', description: 'Malarrif 燈塔與 Lóndrangar 巨石柱是海岸邊的兩個高聳海蝕柱，海鳥棲息地。', reason: '欣賞冰島海岸線獨特的海蝕地貌，感受大自然鬼斧神工，觀察海鳥。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Malarrif%20Lighthouse%20%26%20Lóndrangar%20巨石柱' },
+                    { time: '10:50', location: 'Arnarstapi 小鎮 + 午餐', drive: '10 分', stay: '2 小時', description: '風景如畫的小漁村，以獨特玄武岩拱門和柱狀海岸線聞名，有沿海步道。', reason: '沿著海岸步道徒步，欣賞獨特海蝕地貌和壯觀鳥類懸崖。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Arnarstapi%20小鎮' },
+                    { time: '13:30', location: 'Ytri Tunga 海豹沙灘', drive: '30 分', stay: '45 分', description: '冰島少數可以觀賞到海豹的沙灘之一，退潮時海豹會聚集在岩石上。', reason: '近距離觀察可愛的海豹，享受與野生動物互動，但請保持安全距離。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Ytri%20Tunga%20海豹沙灘' },
+                    { time: '14:45', location: 'Gerðuberg Cliffs 玄武岩柱', drive: '30 分', stay: '30 分', description: '一排整齊排列的巨大玄武岩柱牆，高達14米，像是巨人用斧頭劈開的石壁。', reason: '感受冰島獨特的火山地貌，欣賞自然形成的幾何美學，是攝影絕佳背景。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Gerðuberg%20Cliffs' },
+                    { time: '17:00', location: '住宿：Iceland SJF Apartments', drive: '1 小時 30 分', stay: null, description: '靠近首都，方便第二天前往機場。', reason: '結束半島行程，舒適過渡至首都圈，為隔天離境做準備。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Iceland%20SJF%20Apartments' },
+                ],
+            },
+            D13_0911: {
+                date: '9月11日 (星期四)',
+                title: '藍湖溫泉與歸途',
+                carDistance: '約 1 小時 12 分 (75 公里)',
+                highlights: '藍湖溫泉',
+				routeMap: "https://maps.app.goo.gl/nnFuiuXMo9pjQFc87",
+                plan: [
+                    { time: '08:00', location: '早餐', drive: '步行', stay: '1 小時 30 分', description: '享用早餐，為一天的行程補充能量。', reason: '確保有充足體力開啟最後一天的旅程。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Breakfast' },
+                    { time: '10:00', location: 'Costco gas station 加油', drive: '15 分', stay: '5 分', description: 'Costco 加油站的油價通常比其他地方更優惠。', reason: '還車前加滿油是必須的，選擇 Costco 可以節省一些費用。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Costco%20gas%20station%20Reykjavík' },
+                    { time: '10:45', location: 'Blue Lagoon (藍湖溫泉)', drive: '40 分', stay: '3 小時', description: '冰島最著名的地熱溫泉，以乳藍色溫泉水和豐富礦物質聞名。', reason: '在旅程結束前享受一次奢華的溫泉體驗，放鬆疲憊的身體，完美收尾。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=Blue%20Lagoon%20Iceland' },
+                    { time: '15:10', location: 'KEF 機場還車', drive: '25 分', stay: null, description: '在凱夫拉維克國際機場還車，結束冰島自駕之旅。', reason: '順利還車，準備登機，為冰島旅程劃上句號。', mapUrl: 'https://www.google.com/maps/search/?api=1&query=KEF%20機場還車' },
+                ],
+            },
+        };
+
+        const practicalInfo = {
+            driving: {
+                title: '行車時間與路況',
+                points: [
+                    '<strong>行車時間預估：</strong> 每日駕駛時間較長，特別是D7、D10、D11。實際駕駛時間可能會因天氣（如強風、雨雪、結冰）和路況（如碎石路）而更長。',
+                    '<strong>建議：</strong> 每天多預留 30 分鐘到 1 小時的彈性時間。盡量早點出發，並每2-3小時休息一次。',
+                    '<strong>路況查詢：</strong> 每天出發前務必查看 <a href="http://www.road.is" target="_blank" class="text-blue-500 hover:underline">www.road.is</a> 網站，了解最新路況和天氣預警。',
+                    '<strong>車輛與保險：</strong> 建議租用四驅車（4x4），並購買包含碎石險（GP）和車底險的綜合保險。',
+                    '<strong>強風駕駛：</strong> 遇到強風時緊握方向盤，切勿在風大時貿然打開車門，以免車門被風吹壞。',
+                ],
+            },
+            booking: {
+                title: '景點預訂與開放時間',
+                points: [
+                    '<strong>藍湖溫泉：</strong> 必須提早預訂！尤其您安排在離境日，是熱門時段。強烈建議確認行程後立即上官網預訂。',
+                    '<strong>觀鯨行程：</strong> 9月初仍是觀鯨季節，但船班時間可能因天氣或季節末而調整。務必提前預訂並確認時間。',
+                    '<strong>博物館：</strong> 9月的開放時間可能會有所調整，建議再次上網確認。',
+                ],
+            },
+            packing: {
+                title: '服裝與準備',
+                points: [
+                    '<strong>多層次穿搭：</strong> 準備防水防風外套、保暖中層、快乾衣物、帽子、手套和圍巾。',
+                    '<strong>電子設備：</strong> 為手機、相機等準備防水袋。',
+                ],
+            },
+            other: {
+                title: '其他實用建議',
+                points: [
+                    '<strong>加油：</strong> 離開城鎮時確保油箱加滿，自助加油站通常需要帶晶片的信用卡。',
+                    '<strong>網路與導航：</strong> 建議準備當地SIM卡或租用隨身WiFi，並下載離線地圖App（如Maps.me）。',
+                    '<strong>極光：</strong> 9月已進入極光季節，可下載App（如My Aurora Forecast）查看極光指數。',
+                    '<strong>環保：</strong> 冰島自然環境脆弱，請勿亂扔垃圾、踩踏苔蘚，並遵守步道指示。',
+                    '<strong>飲食：</strong> 冰島餐飲費用高，可在大城市（如阿克雷里）超市採買乾糧。',
+                ],
+            },
+        };
+
+        const attractions = {
+            'Stuðlagil 玄武岩峽谷': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Stuðlagil+玄武岩峽谷',
+                description: 'Stuðlagil 是冰島東部一個近年來爆紅的秘境，以其壯觀的玄武岩柱群聞名。峽谷中流淌著的 Jökulsá á Dal 河，其獨特的藍綠色澤與周圍深色的玄武岩形成鮮明對比，營造出如夢似幻的景觀。這裡被譽為冰島最令人驚嘆的地質奇觀之一，是攝影愛好者的天堂。',
+                website: '',
+            },
+            'Dettifoss (West Side)': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Dettifoss',
+                description: 'Dettifoss 是歐洲水量最大的瀑布，其磅礴的氣勢和震耳欲聾的轟鳴聲令人印象深刻。瀑布位於 Vatnajökull 國家公園內，被稱為「冰島力量之源」。西岸的觀景點較容易到達，遊客可以近距離感受大自然的原始力量與震撼力。',
+                website: 'https://www.vatnajokulsthjodgardur.is/en/areas/vesturland/jokulsargljufur/dettifoss',
+            },
+            'Hverir地熱谷': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Hverir+地熱谷',
+                description: 'Hverir 位於米湖東北方，是一個活躍的地熱區。這裡有滾燙的泥漿池、不斷噴湧的蒸汽孔，以及濃烈的硫磺氣味。地面被各種礦物質染成斑斕的色彩，如同置身於火星表面。這是近距離感受冰島強大地熱活動，體驗獨特地貌的絕佳地點。',
+                website: '',
+            },
+            'Kirkjufell 山 (教會山與教會山瀑布)': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Kirkjufell',
+                description: 'Kirkjufell 是冰島的標誌性地標之一，以其獨特的錐形山體和優美的周邊景色聞名。旁邊的 Kirkjufellsfoss 瀑布是拍攝教會山倒影的最佳角度，構成了一幅明信片般的風景。無論是白天的壯麗還是夜晚的極光，教會山都是冰島旅行必打卡的景點。',
+                website: '',
+            },
+            'Blue Lagoon (藍湖溫泉)': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Blue+Lagoon',
+                description: '藍湖是冰島最著名的地熱溫泉，以其獨特的乳藍色溫泉水和富含礦物質的泥漿聞名。這裡的溫泉水對皮膚有益，被認為是療養勝地。藍湖地理位置靠近機場，是結束旅程、放鬆身心的完美收尾站。提醒：務必提前預訂！',
+                website: 'https://www.bluelagoon.com/',
+            },
+            'Glaumbær Turf Farm & Museum': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Glaumbær+草皮屋',
+                description: 'Glaumbær 是一個保存完好的傳統冰島草皮屋農場，展示了18-19世紀冰島人的生活方式。這種獨特的建築風格利用當地材料（草皮和石頭）建造，與自然環境完美融合。參觀這裡可以深入了解冰島的傳統建築和文化歷史。',
+                website: '',
+            },
+            'Goðafoss 瀑布': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Goðafoss',
+                description: 'Goðafoss 是冰島最美麗的瀑布之一，形狀如巨大的馬蹄形。其名字「眾神瀑布」源自冰島皈依基督教的歷史故事：西元1000年，冰島法律演講人將北歐眾神雕像扔入瀑布，象徵著基督教的到來。其景觀獨特壯麗，是冰島北部不可錯過的經典瀑布。',
+                website: '',
+            },
+            'Búðir 黑教堂': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Búðir+黑教堂',
+                description: 'Búðir 黑教堂是斯奈山半島的標誌性景點。這座黑色木製教堂矗立在廣闊的熔岩地和海岸線之間，景色獨特而神秘。教堂的極簡設計與冰島蒼茫的自然景色形成強烈對比，是攝影師們的最愛。',
+                website: '',
+            },
+            'Ytri Tunga 海豹沙灘': {
+                image: 'https://placehold.co/800x600/a8c6f7/fff?text=Ytri+Tunga+海豹沙灘',
+                description: 'Ytri Tunga 是冰島少數可以近距離觀賞到海豹的沙灘之一。在退潮時，海豹會聚集在海岸邊的岩石上曬太陽。這是一個與野生動物互動的絕佳機會，但請務必保持安全距離，不要打擾牠們。',
+                website: '',
+            },
+        };
+
+        const allLocations = [...new Set(Object.values(itineraries).flatMap(day => day.plan).map(item => item.location))].filter(loc => attractions[loc] || loc.includes('住宿') || loc.includes('餐廳') || loc.includes('午餐'));
+
+</script>
+
+<div id="app" class="flex flex-col min-h-screen">
+    <!-- 導航欄 -->
+    <header class="sticky top-0 bg-white shadow-md z-30">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <h1 class="text-2xl font-bold text-blue-900 cursor-pointer" onclick="showPage('home')">冰島之旅</h1>
+            <nav class="hidden md:flex space-x-6">
+                <button class="nav-link text-gray-600 hover:text-blue-600 transition-colors font-medium" data-target="home">行程總覽</button>
+                <button class="nav-link text-gray-600 hover:text-blue-600 transition-colors font-medium" data-target="attractions">景點介紹</button>
+                <button class="nav-link text-gray-600 hover:text-blue-600 transition-colors font-medium" data-target="info">實用資訊</button>
+                <button class="nav-link text-gray-600 hover:text-blue-600 transition-colors font-medium" data-target="food">超市美食攻略</button>
+				<button class="nav-link text-gray-600 hover:text-blue-600 transition-colors font-medium" data-target="clothing">冰島服飾品牌</button>
+            </nav>
+            <button id="menu-btn" class="md:hidden p-2 rounded-xl text-blue-600 hover:bg-blue-100 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- 手機版側邊選單 -->
+    <div id="drawer" class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 ease-in-out z-40">
+        <div class="p-4 flex items-center justify-between border-b">
+            <h2 class="text-2xl font-bold text-blue-900">選單</h2>
+            <button id="drawer-close-btn" class="text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <nav class="p-4 space-y-2">
+            <button class="mobile-nav-link w-full text-left p-2 rounded-xl hover:bg-blue-100 transition-colors" data-target="home"><span class="text-lg font-medium">首頁 (行程總覽)</span></button>
+            <button class="mobile-nav-link w-full text-left p-2 rounded-xl hover:bg-blue-100 transition-colors" data-target="attractions"><span class="text-lg font-medium">精選景點介紹</span></button>
+            <button class="mobile-nav-link w-full text-left p-2 rounded-xl hover:bg-blue-100 transition-colors" data-target="info"><span class="text-lg font-medium">注意事項與實用資訊</span></button>
+            <button class="mobile-nav-link w-full text-left p-2 rounded-xl hover:bg-blue-100 transition-colors" data-target="food"><span class="text-lg font-medium">超市美食攻略</span></button>
+			<button class="mobile-nav-link w-full text-left p-2 rounded-xl hover:bg-blue-100 transition-colors" data-target="clothing"><span class="text-lg font-medium">冰島服飾品牌</span></button>
+        </nav>
+    </div>
+    <div id="drawer-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 transition-opacity opacity-0 pointer-events-none" onclick="toggleDrawer()"></div>
+
+    <main id="main-content" class="container mx-auto py-8 px-4 flex-grow"></main>
+
+    <!-- 景點詳情彈出視窗 保留原本 -->
+    <div id="attraction-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative shadow-xl">
+            <button id="modal-close-btn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* 保留你原本的 renderHomePage, renderItineraryPage, renderAttractionsPage, renderInfoPage */
+// DOM 元素引用
+        const mainContent = document.getElementById('main-content');
+        const attractionModal = document.getElementById('attraction-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+        const menuBtn = document.getElementById('menu-btn');
+        const drawer = document.getElementById('drawer');
+        const drawerOverlay = document.getElementById('drawer-overlay');
+        const drawerCloseBtn = document.getElementById('drawer-close-btn');
+
+        // 頁面渲染函數
+        function showPage(pageName, dayKey = null) {
+            mainContent.innerHTML = '';
+            window.scrollTo(0, 0); // 切換頁面時滾動到頂部
+
+            switch (pageName) {
+                case 'home':
+                    renderHomePage();
+                    break;
+                case 'itinerary':
+                    renderItineraryPage(dayKey);
+                    break;
+                case 'attractions':
+                    renderAttractionsPage();
+                    break;
+                case 'info':
+                    renderInfoPage();
+                    break;
+				case 'clothing':
+					renderClothingPage();
+					break;
+					
+            }
+            toggleDrawer(false); // 關閉側邊選單
+        }
+
+        // 渲染主頁面 (行程總覽)
+        function renderHomePage() {
+            const container = document.createElement('div');
+            container.className = 'p-8 space-y-8';
+            container.innerHTML = `
+                <div class="text-center">
+                    <h1 class="text-5xl font-extrabold text-blue-900">冰島深度探索之旅</h1>
+                    <p class="mt-4 text-xl text-gray-600">十三日精彩行程導覽 (附詳細時間規劃)</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <h2 class="text-3xl font-bold text-blue-800 mb-4">行程總覽</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="itinerary-cards"></div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-6">
+                    <h2 class="text-3xl font-bold text-blue-800 mb-4">行程亮點</h2>
+                    <div class="grid md:grid-cols-2 gap-6" id="attraction-highlights"></div>
+                </div>
+            `;
+            mainContent.appendChild(container);
+
+            const itineraryCards = document.getElementById('itinerary-cards');
+            Object.keys(itineraries).forEach((dayKey, index) => {
+                const dayData = itineraries[dayKey];
+                const card = document.createElement('div');
+                card.className = 'bg-blue-50 p-6 rounded-xl shadow-lg transform transition-transform duration-300 hover:scale-105 cursor-pointer';
+                card.innerHTML = `
+                    <h3 class="text-2xl font-semibold text-blue-700">${`第 ${index + 1} 天：${dayData.date}`}</h3>
+                    <p class="mt-2 text-lg font-medium text-gray-800">${dayData.title}</p>
+                    <p class="mt-1 text-sm text-gray-500">${dayData.highlights}</p>
+                `;
+                card.addEventListener('click', () => showPage('itinerary', dayKey));
+                itineraryCards.appendChild(card);
+            });
+
+            const attractionHighlights = document.getElementById('attraction-highlights');
+            allLocations.forEach(location => {
+                const item = document.createElement('div');
+                item.className = 'bg-blue-50 p-4 rounded-xl shadow-md flex items-center space-x-4 transform transition-transform duration-300 hover:scale-105 cursor-pointer';
+                item.innerHTML = `
+                    <svg class="lucide lucide-map-pin text-blue-500 flex-shrink-0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <p class="text-lg font-medium text-gray-800">${location}</p>
+                `;
+                item.addEventListener('click', () => showAttractionModal(location));
+                attractionHighlights.appendChild(item);
+            });
+        }
+
+        // 渲染每日行程頁面
+        function renderItineraryPage(dayKey) {
+            const dayData = itineraries[dayKey];
+            const dayKeys = Object.keys(itineraries);
+            const dayIndex = dayKeys.indexOf(dayKey);
+            const container = document.createElement('div');
+            container.className = 'p-4 md:p-8 min-h-screen';
+            container.innerHTML = `
+                <div class="flex items-center justify-between mb-6">
+                    <button class="flex items-center space-x-2 text-blue-600 font-semibold text-lg hover:underline" onclick="showPage('home')">
+                        <svg class="lucide lucide-arrow-left-circle" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg>
+                        <span>返回總覽</span>
+                    </button>
+                    <div class="flex space-x-2">
+                        <button id="prev-day-btn" class="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" ${dayIndex === 0 ? 'disabled' : ''}>
+                            <svg class="lucide lucide-arrow-left-circle" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 8-4 4 4 4"/><path d="M16 12H8"/></svg>
+                        </button>
+                        <button id="next-day-btn" class="p-2 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200" ${dayIndex === dayKeys.length - 1 ? 'disabled' : ''}>
+                            <svg class="lucide lucide-arrow-right-circle" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m12 8 4 4-4 4"/><path d="M8 12h8"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8">
+                    <h1 class="text-4xl font-bold text-blue-900">${`第 ${dayIndex + 1} 天：${dayData.date}`}</h1>
+                    <p class="mt-2 text-2xl font-medium text-gray-800">${dayData.title}</p>
+                    <p class="mt-1 text-sm text-gray-500">當日總車程：${dayData.carDistance}</p>
+					${dayData.routeMap ? `
+						<a href="${dayData.routeMap}" target="_blank" rel="noopener noreferrer" 
+							class="inline-flex items-center text-blue-600 hover:underline mt-2 text-base font-medium">
+							<svg class="lucide lucide-map" width="20" height="20" ...></svg>
+							<span class="ml-1">查看今日路線地圖</span>
+							</a>
+					` : ''}
+
+                    <hr class="my-6 border-blue-200" />
+                    <div class="relative" id="itinerary-timeline"></div>
+				
+            `;
+            mainContent.appendChild(container);
+
+            const timeline = document.getElementById('itinerary-timeline');
+            dayData.plan.forEach((item, index) => {
+                const timelineItem = document.createElement('div');
+                timelineItem.className = 'flex mb-6 last:mb-0 relative';
+                timelineItem.innerHTML = `
+                    <div class="absolute left-3 md:left-5 top-0 bottom-0 w-1 bg-blue-200 rounded-full"></div>
+                    <div class="flex items-center justify-center w-6 h-6 md:w-10 md:h-10 bg-blue-600 text-white rounded-full z-10 flex-shrink-0">
+                        <svg class="lucide lucide-check-square" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <div class="ml-6 md:ml-8 flex-grow">
+                        <div class="bg-blue-50 p-4 rounded-xl shadow-md">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between">
+                                <div class="flex items-center space-x-2">
+                                    <p class="text-xl font-bold text-blue-800">${item.time}</p>
+                                    <h3 class="text-xl font-semibold text-gray-900 ${attractions[item.location] ? 'cursor-pointer hover:text-blue-600 transition-colors' : ''}" data-location="${item.location}">
+                                        ${item.location}
+                                    </h3>
+                                    ${item.mapUrl ? `<a href="${item.mapUrl}" target="_blank" rel="noopener noreferrer" class="text-blue-500 hover:text-blue-700 transition-colors flex items-center space-x-1">
+                                        <svg class="lucide lucide-map-pin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                        <span>地圖</span>
+                                    </a>` : ''}
+                                </div>
+                                <div class="flex space-x-4 text-sm text-gray-600 mt-2 md:mt-0">
+                                    ${item.drive ? `<p>車程: ${item.drive}</p>` : ''}
+                                    ${item.stay ? `<p>停留: ${item.stay}</p>` : ''}
+                                </div>
+                            </div>
+                            <p class="mt-2 text-gray-700">${item.description}</p>
+                        </div>
+                    </div>
+                `;
+                timeline.appendChild(timelineItem);
+            });
+
+            // 處理景點點擊事件
+            timeline.querySelectorAll('h3').forEach(h3 => {
+                const location = h3.getAttribute('data-location');
+                if (attractions[location]) {
+                    h3.addEventListener('click', () => showAttractionModal(location));
+                }
+            });
+
+            // 上下頁按鈕事件
+            document.getElementById('prev-day-btn').addEventListener('click', () => showPage('itinerary', dayKeys[dayIndex - 1]));
+            document.getElementById('next-day-btn').addEventListener('click', () => showPage('itinerary', dayKeys[dayIndex + 1]));
+        }
+
+        // 渲染景點介紹頁面
+        function renderAttractionsPage() {
+            const container = document.createElement('div');
+            container.className = 'p-8 min-h-screen';
+            container.innerHTML = `
+                <h1 class="text-4xl font-bold text-blue-900 mb-8">精選景點介紹專區</h1>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="attractions-grid"></div>
+            `;
+            mainContent.appendChild(container);
+
+            const attractionsGrid = document.getElementById('attractions-grid');
+            allLocations.forEach(location => {
+                if (attractions[location]) {
+                    const attraction = attractions[location];
+                    const foundItem = Object.values(itineraries).flatMap(day => day.plan).find(item => item.location === location);
+                    const mapUrl = foundItem ? foundItem.mapUrl : '';
+                    const card = document.createElement('div');
+                    card.className = 'bg-white rounded-2xl shadow-xl overflow-hidden transform transition-transform duration-300 hover:scale-105 cursor-pointer';
+                    card.innerHTML = `
+                        <div class="w-full h-48 bg-gray-200 flex items-center justify-center text-gray-400">
+                            <img src="${attraction.image}" alt="${location}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x600/e2e8f0/94a3b8?text=Image+Not+Found';" />
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold text-blue-800">${location}</h3>
+                            <p class="mt-2 text-gray-700 text-sm line-clamp-3">${attraction.description}</p>
+                            <div class="mt-4 flex flex-wrap gap-4">
+                                ${mapUrl ? `
+                                <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-blue-600 transition-colors flex items-center space-x-2">
+                                    <svg class="lucide lucide-map-pin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <span>地圖</span>
+                                </a>` : ''}
+                                ${attraction.website ? `
+                                <a href="${attraction.website}" target="_blank" rel="noopener noreferrer" class="bg-green-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-green-600 transition-colors flex items-center space-x-2">
+                                    <svg class="lucide lucide-info" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                    <span>官網</span>
+                                </a>` : ''}
+                            </div>
+                        </div>
+                    `;
+                    card.addEventListener('click', () => showAttractionModal(location));
+                    attractionsGrid.appendChild(card);
+                }
+            });
+        }
+
+        // 渲染實用資訊頁面
+        function renderInfoPage() {
+            const container = document.createElement('div');
+            container.className = 'p-8 min-h-screen';
+            container.innerHTML = `
+                <h1 class="text-4xl font-bold text-blue-900 mb-8">旅遊注意事項與實用資訊</h1>
+                <div class="space-y-8" id="info-sections"></div>
+            `;
+            mainContent.appendChild(container);
+
+            const infoSections = document.getElementById('info-sections');
+            Object.keys(practicalInfo).forEach(key => {
+                const infoSection = document.createElement('div');
+                infoSection.className = 'bg-white rounded-2xl shadow-xl p-6 md:p-8';
+                infoSection.innerHTML = `
+                    <h2 class="text-3xl font-bold text-blue-800 mb-4">${practicalInfo[key].title}</h2>
+                    <ul class="space-y-3 list-disc list-inside text-gray-700"></ul>
+                `;
+                const ul = infoSection.querySelector('ul');
+                practicalInfo[key].points.forEach(point => {
+                    const li = document.createElement('li');
+                    li.innerHTML = point;
+                    ul.appendChild(li);
+                });
+                infoSections.appendChild(infoSection);
+            });
+        }
+
+        // 顯示景點彈出視窗
+        function showAttractionModal(location) {
+            const attractionData = attractions[location];
+            if (!attractionData) return;
+
+            const foundItem = Object.values(itineraries).flatMap(day => day.plan).find(item => item.location === location);
+            const mapUrl = foundItem ? foundItem.mapUrl : '';
+
+            modalContent.innerHTML = `
+                <div class="w-full h-64 bg-gray-200 rounded-xl overflow-hidden mb-4">
+                    <img src="${attractionData.image}" alt="${location}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/800x600/e2e8f0/94a3b8?text=Image+Not+Found';" />
+                </div>
+                <h2 class="text-3xl font-bold text-blue-900">${location}</h2>
+                <p class="mt-4 text-gray-700">${attractionData.description}</p>
+                <div class="mt-4 flex flex-wrap gap-4">
+                    ${mapUrl ? `
+                    <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="bg-blue-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-blue-600 transition-colors flex items-center space-x-2">
+                        <svg class="lucide lucide-map-pin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span>查看地圖</span>
+                    </a>` : ''}
+                    ${attractionData.website ? `
+                    <a href="${attractionData.website}" target="_blank" rel="noopener noreferrer" class="bg-green-500 text-white font-semibold py-2 px-4 rounded-xl shadow-md hover:bg-green-600 transition-colors flex items-center space-x-2">
+                        <svg class="lucide lucide-info" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                        <span>景點官網</span>
+                    </a>` : ''}
+                </div>
+            `;
+            attractionModal.classList.remove('hidden');
+        }
+        
+        // 隱藏景點彈出視窗
+        function hideAttractionModal() {
+            attractionModal.classList.add('hidden');
+        }
+
+        // 切換側邊選單
+        function toggleDrawer(force) {
+            const isOpen = drawer.classList.contains('-translate-x-full');
+            const shouldOpen = force === undefined ? isOpen : force;
+
+            if (shouldOpen) {
+                drawer.classList.remove('-translate-x-full');
+                drawerOverlay.classList.remove('opacity-0', 'pointer-events-none');
+                drawerOverlay.classList.add('opacity-100');
+            } else {
+                drawer.classList.add('-translate-x-full');
+                drawerOverlay.classList.add('opacity-0', 'pointer-events-none');
+                drawerOverlay.classList.remove('opacity-100');
+            }
+        }
+
+        // 頁面載入後，註冊事件並顯示主頁
+        window.onload = function() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const target = e.currentTarget.getAttribute('data-target');
+                    showPage(target);
+                });
+            });
+
+            document.querySelectorAll('.mobile-nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const target = e.target.closest('button').getAttribute('data-target');
+                    showPage(target);
+                });
+            });
+            
+            modalCloseBtn.addEventListener('click', hideAttractionModal);
+            menuBtn.addEventListener('click', () => toggleDrawer(true));
+            drawerCloseBtn.addEventListener('click', () => toggleDrawer(false));
+            
+            // 初始顯示首頁
+            showPage('home');
+        };
+
+        // Lucide Icons 初始化 (將 SVG 圖示轉換為實際的 HTML)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+/* 新增 renderFoodGuidePage */
+
+    /* ... 保持原本的 itineraries, practicalInfo, attractions, allLocations 不動 ... */
+
+    function renderFoodGuidePage() {
+    const container = document.createElement('div');
+    container.className = 'p-8 space-y-8';
+    container.innerHTML = `
+        <h1 class="text-4xl font-bold text-blue-900">🛒 冰島自煮與超市美食攻略</h1>
+
+        <section class="bg-white p-6 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">一、冰島超市概覽</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-300">
+                    <thead class="bg-blue-100">
+                        <tr>
+                            <th class="border p-2">超市/商店</th>
+                            <th class="border p-2">特點</th>
+                            <th class="border p-2">價格</th>
+                            <th class="border p-2">備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td class="border p-2">Bonus（小豬超市）</td><td class="border p-2">最便宜、種類齊全</td><td class="border p-2">最低</td><td class="border p-2">黃底粉紅小豬Logo，10:00–19/20</td></tr>
+                        <tr><td class="border p-2">Krónan</td><td class="border p-2">價格接近Bonus，選擇更多，農產品豐富</td><td class="border p-2">低</td><td class="border p-2">有高品質冰島本地食材</td></tr>
+                        <tr><td class="border p-2">Netto</td><td class="border p-2">介於平價與高價間</td><td class="border p-2">中</td><td class="border p-2">也販售家用品</td></tr>
+                        <tr><td class="border p-2">Hagkaup</td><td class="border p-2">高檔百貨型超市，種類最多</td><td class="border p-2">高</td><td class="border p-2">部分分店全年無休、24小時營業</td></tr>
+                        <tr><td class="border p-2">便利商店（10/11、Krambúðin）</td><td class="border p-2">營業時間長</td><td class="border p-2">高</td><td class="border p-2">適合緊急補給</td></tr>
+                        <tr><td class="border p-2">亞洲超市（Dai Phat Asian Market）</td><td class="border p-2">亞洲蔬菜、調味料、泡麵、餃子</td><td class="border p-2">中</td><td class="border p-2">雷克雅維克郊區Kópavogur</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">二、自煮小技巧</h2>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>善用住宿廚房或露營地烹飪區（有時有免費調味料、瓦斯罐等共享物資）</li>
+                <li>冰島自來水可直接飲用，帶保溫瓶即可</li>
+                <li>自備購物袋（超市不免費提供）</li>
+                <li>食物入境限制：煮熟/罐裝食品 ≤ 3 公斤；禁止生肉、生蛋、未高溫殺菌乳製品</li>
+                <li>部分超市需自行秤重貼標籤</li>
+                <li>酒類僅能在 Vinbudin 國營專賣店購買（週日休息）</li>
+            </ul>
+        </section>
+
+        <section class="bg-white p-6 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">三、冰島自煮餐點靈感</h2>
+            <div class="space-y-6">
+                <div>
+                    <h3 class="font-semibold text-xl text-blue-700">早餐</h3>
+                    <ul class="list-disc list-inside mt-2 text-gray-700">
+                        <li>麵包 + 抹醬（魚子醬、蒜蓉醬、鷹嘴豆醬等）</li>
+                        <li>Skyr 優格（可加水果、蜂蜜）或 Skyr 飲品</li>
+                        <li>冰島溫室藍莓、草莓（實惠好吃）</li>
+                        <li>牛奶（醇厚）、雞蛋</li>
+                        <li>預製三明治、沙拉</li>
+                        <li>冰島可口可樂（蔗糖+純淨水源）</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-xl text-blue-700">午餐（方便攜帶）</h3>
+                    <ul class="list-disc list-inside mt-2 text-gray-700">
+                        <li>三明治（火腿、起司、沙拉）</li>
+                        <li>泡麵/速食麵（加蛋、蔬菜）</li>
+                        <li>魚罐頭</li>
+                        <li>超市預製熱便當（排骨飯、雞肉飯）</li>
+                        <li>戶外煮食注意防風</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-xl text-blue-700">晚餐</h3>
+                    <ul class="list-disc list-inside mt-2 text-gray-700">
+                        <li>義大利麵：海鮮義大利麵（蝦、小龍蝦、鮭魚、鱈魚）、番茄肉醬麵、雲吞+青醬</li>
+                        <li>飯類：生魚片丼、肉燥飯、馴鹿肉料理</li>
+                        <li>排餐/烤肉：牛排、羊排（搭馬鈴薯、炒菇）、烤肉串</li>
+                        <li>湯品：羊肉湯、海鮮湯（即食包）、雞湯塊煮湯</li>
+                        <li>當地食材：新鮮魚類、小龍蝦、溫室蔬菜、專用香料</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-6 rounded-2xl shadow-xl">
+            <h2 class="text-2xl font-bold text-blue-800 mb-4">四、推薦採買品項</h2>
+            <ul class="list-disc list-inside space-y-2 text-gray-700">
+                <li>Omnom 巧克力（海鹽口味、包裝精美）</li>
+                <li>甘草糖 Lakkrís（鹹甜特殊風味）</li>
+                <li>LYSI 魚油（多種口味與用途）</li>
+                <li>即食雞扒</li>
+                <li>冰島可口可樂</li>
+                <li>Lava Whiskey Stone（火山岩冰磚）</li>
+                <li>乳製品（Skyr、優格、乳酪）</li>
+                <li>Smámál 巧克力慕斯（泡芙口感）</li>
+                <li>魚子醬</li>
+            </ul>
+        </section>
+    `;
+	mainContent.appendChild(container);
+    }
+    
+    /* ... 保持原本的 itineraries, practicalInfo, attractions, allLocations, showPage, renderItineraryPage, renderPracticalPage, renderAttractionPage, renderFoodGuidePage 不動 ... */
+
+    function renderClothingPage() {
+        const container = document.createElement('div');
+        container.className = 'p-8 space-y-8';
+        container.innerHTML = `
+            <h1 class="text-4xl font-bold text-blue-900">🧥 冰島服飾品牌攻略</h1>
+
+            <section class="bg-white p-6 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">冰島服裝品牌特色</h2>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>實用與品質兼具：由於冰島天氣多變，品牌特別注重服裝的品質和實用性，多採用高品質的羊毛、鵝絨和高科技布料，保證保暖、防水且耐用。</li>
+                    <li>獨特的北歐風格：設計靈感多來自冰島的自然風光和氣候，風格簡約、時尚且獨特。</li>
+                    <li>環保與永續發展：許多品牌都強調對環境保護的承諾，使用永續材料和生產方式，並與當地社區合作。</li>
+                </ul>
+            </section>
+
+            <section class="bg-white p-6 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">主要冰島戶外運動品牌</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">66° North</h3>
+                        <p class="text-gray-700 mt-1">冰島歷史最悠久的戶外品牌之一。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：極高耐用性與功能性，使用Gore-Tex®和Polartec®等高科技面料。</li>
+                            <li>風格：簡約時尚的北歐設計，適合戶外運動與日常穿著。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Icewear</h3>
+                        <p class="text-gray-700 mt-1">以冰島羊毛製品起家，在當地深具影響力。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：高品質冰島羊毛製品，尤其是經典的冰島毛衣。</li>
+                            <li>產品線：涵蓋各種戶外服裝、配件和紀念品。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Zo·On Iceland</h3>
+                        <p class="text-gray-700 mt-1">時尚與功能兼具的戶外品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：設計靈感來自冰島的極端氣候，強調保暖、功能和舒適性。</li>
+                            <li>理念：重視環保，採用永續材料並支持當地經濟。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Cintamani</h3>
+                        <p class="text-gray-700 mt-1">以神秘石頭命名的戶外運動品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：提供高效保暖、透氣與防風防水的服裝。</li>
+                            <li>風格：將實用性與當代時尚結合，適合戶外冒險與城市日常。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Swimslow</h3>
+                        <p class="text-gray-700 mt-1">專注於游泳和環保的品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：使用高品質可再生資源，設計簡約時尚且具包容性。</li>
+                            <li>風格：靈感來自冰島自然風光與北歐美學，色彩清新。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">主要冰島時尚服裝品牌</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Farmers Market</h3>
+                        <p class="text-gray-700 mt-1">高端服裝品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：結合冰島傳統美學與現代簡約設計，使用低污染材料並支持本地工藝。</li>
+                            <li>風格：簡約耐用，適合日常穿搭與冬季外出。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Spaksmannsspjarir</h3>
+                        <p class="text-gray-700 mt-1">以「智者的服裝」為名的女裝品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：設計具藝術感，挑戰傳統時尚，可用非傳統材料與剪裁。</li>
+                            <li>風格：前衛、實驗性，不同系列可自由混搭。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Inklaw</h3>
+                        <p class="text-gray-700 mt-1">冰島首個街頭服飾品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：設計靈感源於hip-hop文化，將顏料與噴繪融入服裝中。</li>
+                            <li>理念：鼓勵個人透過服裝表達獨特的自我。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-xl text-blue-700">Hildur Yeoman</h3>
+                        <p class="text-gray-700 mt-1">屢獲殊榮的女裝品牌。</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2">
+                            <li>特色：設計靈感來自冰島自然與女性生命力，專為凸顯女性身材與力量。</li>
+                            <li>材質：使用傳統冰島手藝與再生材料。</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white p-6 rounded-2xl shadow-xl">
+                <h2 class="text-2xl font-bold text-blue-800 mb-4">其他資訊</h2>
+                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                    <li>戶外用品商店：除了單一品牌店，冰島也有許多專營的戶外運動商店，提供一站式購物或租賃服務，協助遊客應對多變的天氣。文章中列舉了八家商店供參考。</li>
+                    <li>旅遊建議：提醒遊客無論選擇哪個季節前往，都應準備好分層穿衣，以應對冰島「頑皮」的多變天氣。</li>
+                </ul>
+            </section>
+        `;
+        mainContent.appendChild(container);
+    }
+
+
+
+
+/* 修改 showPage 增加 food */
+function showPage(pageName, dayKey = null) {
+    mainContent.innerHTML = '';
+    window.scrollTo(0, 0);
+    switch (pageName) {
+        case 'home': renderHomePage(); break;
+        case 'itinerary': renderItineraryPage(dayKey); break;
+        case 'attractions': renderAttractionsPage(); break;
+        case 'info': renderInfoPage(); break;
+        case 'food': renderFoodGuidePage(); break;
+		case 'clothing': renderClothingPage(); break;
+    }
+    toggleDrawer(false);
+}
+
+/* 其他事件綁定保留 */
+</script>
+</body>
+</html>
