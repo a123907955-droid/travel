@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 長野・輕井澤・東京 秋季浪漫漫遊</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 FontAwesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入文青風字體 Klee One & M PLUS Rounded 1c -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=M+PLUS+Rounded+1c:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Klee One', 'M PLUS Rounded 1c', sans-serif;
+            background-color: #F9F6F0; /* 燕麥奶茶底色 */
+            color: #5D534A; /* 溫柔深棕色 */
+        }
+        
+        .timeline-container { position: relative; }
+        
+        .timeline-line {
+            position: absolute;
+            top: 1rem;
+            bottom: 1rem;
+            left: 1.5rem;
+            width: 2px;
+            border-left: 2px dashed #DCCDBA;
+            z-index: 0;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F9F6F0; }
+        ::-webkit-scrollbar-thumb { background: #DCCDBA; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C4B29E; }
+    </style>
+</head>
+<body class="pb-12">
+
+    <!-- 頂部 Header 改為溫暖的森林鼠尾草綠 -->
+    <header class="bg-[#8F9E8B] text-white py-10 px-6 shadow-sm rounded-b-[2.5rem] relative overflow-hidden">
+        <div class="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white opacity-10 rounded-full"></div>
+        <div class="absolute bottom-[-40px] left-[-10px] w-24 h-24 bg-white opacity-10 rounded-full"></div>
+        
+        <div class="max-w-3xl mx-auto relative z-10 text-center md:text-left">
+            <h1 class="text-3xl md:text-4xl font-semibold mb-3 tracking-wide">
+                2026 長野・輕井澤・東京之旅 <i class="fa-solid fa-tree text-[#E9EDD9] ml-1"></i>
+            </h1>
+            <p class="text-[#E9EDD9] flex items-center justify-center md:justify-start gap-2 text-lg">
+                <i class="fa-regular fa-calendar-check"></i> 2026/09/25 - 2026/09/30 (6 Days)
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 mt-10">
+        <!-- 分頁按鈕區 -->
+        <div id="tabs-container" class="flex space-x-3 bg-[#EFEBE0] p-1.5 rounded-2xl mb-10 overflow-x-auto shadow-inner">
+            <!-- JS 動態生成 -->
+        </div>
+
+        <div class="bg-white rounded-[2rem] shadow-sm border border-[#F0EBE1] p-6 sm:p-10 relative">
+            <!-- 標題裝飾 -->
+            <div class="flex items-center gap-3 mb-8 pb-4 border-b border-dashed border-[#E5DFD3]">
+                <i class="fa-solid fa-location-dot text-[#D97D64] text-xl" id="title-icon"></i>
+                <h2 id="day-title" class="text-2xl font-semibold text-[#6C635A]">
+                    <!-- JS 動態標題 -->
+                </h2>
+            </div>
+            
+            <div class="timeline-container space-y-4">
+                <div class="timeline-line" id="timeline-line"></div>
+                <div id="events-container" class="space-y-6 md:space-y-8 relative">
+                    <!-- 行程卡片區 (或大綱區) -->
+                </div>
+            </div>
+
+            <!-- 底部導覽按鈕區 -->
+            <div id="bottom-nav-container" class="mt-12 pt-6 border-t border-dashed border-[#E5DFD3] flex justify-between items-center">
+                <!-- JS 動態生成底部按鈕 -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // --- 完整行程資料庫 (已修正戶隱神社純徒步路線與回程班機 CI0103) ---
+        const itineraryData = [
+            {
+                isSummary: true,
+                day: "Overview",
+                date: "行程大綱",
+                title: "六天五夜行程總覽與必買清單",
+                highlights: [
+                    { dayTitle: "Day 1：抵達東京與質感街區漫步", icon: "fa-wine-glass", desc: "抵達上野辦理入住，走訪中目黑、代官山與惠比壽，品嚐燒肉 Ushigoro 貫頂級饗宴。" },
+                    { dayTitle: "Day 2：信州靈氣 戶隱五社自駕一日遊", icon: "fa-tree", desc: "新幹線奔向長野，自駕探訪戶隱神社與鏡池，晚間於長野品嚐すき楼壽喜燒。" },
+                    { dayTitle: "Day 3：善光寺祈福與舊輕井澤渡假", icon: "fa-bell", desc: "善光寺朝聖買限定風景印，搭新幹線進輕井澤，入住頂級 The Prince 享受尊榮禮賓。" },
+                    { dayTitle: "Day 4：中輕井澤教堂與星野森呼吸", icon: "fa-church", desc: "造訪石之教堂與高原教堂，漫步榆樹街小鎮，品嚐村民食堂並享用飯店頂級法式晚餐。" },
+                    { dayTitle: "Day 5：暢遊 Outlet 與東京潮聖夜", icon: "fa-bag-shopping", desc: "輕井澤王子購物廣場血拚，返回東京銀座京橋，夜訪澀谷 PARCO 與頂級燒鳥名店。" },
+                    { dayTitle: "Day 6：銀座晨間散策與平安歸途", icon: "fa-plane-departure", desc: "整理戰利品搭乘 N'EX 成田特快前往機場，滿載信州與東京的美好回憶返台！" }
+                ],
+                info: [
+                    { label: "航班資訊", text: "去程 CI0102 07:55-12:35 ✈️ 回程 CI0103 13:35-16:40", icon: "fa-plane" },
+                    { label: "交通方式", text: "北陸新幹線、長野 ORIX 自駕、星野接駁巴士與西武巴士", icon: "fa-train-subway" },
+                    { label: "頂級住宿", text: "上野三井花園 ➔ 長野相鐵 FRESA INN ➔ 輕井澤 The Prince (2晚) ➔ 銀座京橋大和 Roynet", icon: "fa-hotel" }
+                ],
+                mustBuy: [
+                    "Birkenstock (勃肯鞋)",
+                    "LE TALON 精緻優雅高跟鞋",
+                    "Uniqlo 俐落西裝系列",
+                    "牛乳石鹼 (粉紅滋潤限定版)",
+                    "Suica 小企鵝聯名週邊商品",
+                    "八幡屋礒五郎 企鵝聯名七味粉",
+                    "澤屋 (SAWAYA) 草莓手工果醬",
+                    "輕井澤限定高原精釀啤酒"
+                ]
+            },
+            {
+                day: "Day 1",
+                date: "09/25 (五)",
+                title: "抵達東京 / 潮流文青街區漫步",
+                events: [
+                    { 
+                        time: "07:55 - 12:35", 
+                        title: "搭乘華航 CI0102 班機", 
+                        desc: "帶著愉悅期待的心情起飛，順利降落東京成田機場（預計 12:35 抵達）。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=成田國際機場", 
+                        icon: "fa-plane-departure" 
+                    },
+                    { 
+                        time: "13:30 - 14:00", 
+                        title: "上野車站 Suica 企鵝專賣店", 
+                        desc: "辦理入境並搭乘 Skyliner 抵達上野站後，先到車站內的 Pensta (Suica 企鵝專賣店) 逛逛可愛小企鵝限定商品！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Pensta+上野店", 
+                        icon: "fa-crow",
+                        transit: { text: "搭乘 Skyliner 特快列車抵達上野站", icon: "fa-train" }
+                    },
+                    { 
+                        time: "14:00 - 14:30", 
+                        title: "入住：三井花園飯店上野 (Mitsui Garden Hotel)", 
+                        desc: "抵達飯店辦理 Check-in 手續，稍作歇息並寄放好大件行李，輕裝準備出發去逛街。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=三井花園飯店上野", 
+                        icon: "fa-hotel",
+                        transit: { text: "從上野車站步行約 5 分鐘，先去飯店放行李", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "14:45 - 17:00", 
+                        title: "中目黑 質感目黑川散策", 
+                        desc: "漫步在氛圍舒服寧靜的目黑川畔，周圍有許多選物小店、星巴克旗艦店與特色文藝咖啡廳。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=中目黑站", 
+                        icon: "fa-mug-saucer",
+                        transit: { text: "走出飯店搭乘日比谷線，約 39 分鐘直達中目黑站", icon: "fa-train-subway" }
+                    },
+                    { 
+                        time: "17:00 - 18:30", 
+                        title: "代官山 蔦屋書店與美學街區", 
+                        desc: "走訪世界最美書店之一的代官山 T-SITE 蔦屋書店，周圍綠蔭環繞、充滿現代建築之美。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=代官山+蔦屋書店", 
+                        icon: "fa-book-open",
+                        transit: { text: "悠閒緩坡步行約 15 分鐘前往代官山", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "18:30 - 20:20", 
+                        title: "惠比壽商圈 逛街採買", 
+                        desc: "沉浸在惠比壽的都會氛圍中，可至車站周圍百貨或是花園廣場散步，準備迎接晚餐。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=惠比壽站", 
+                        icon: "fa-bag-shopping",
+                        transit: { text: "逛完代官山後，步行約 12 分鐘前往惠比壽", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "20:30", 
+                        title: "晚餐：燒肉 Ushigoro 貫 惠比壽本店", 
+                        desc: "✨ <b>已預約 20:30 晚餐！</b><br>享受細緻頂級黑毛和牛與特選熟成牛肉，極致奢華的東京第一夜燒肉饗宴！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Ushigoro+Kan+Ebisu+Honten", 
+                        icon: "fa-fire-burner",
+                        transit: { text: "在惠比壽商圈散步前往餐廳入座", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "22:30", 
+                        title: "返回飯店休息", 
+                        desc: "吃飽喝足後，搭車回上野的飯店好好休息，準備迎接明天的長野之旅。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=三井花園飯店上野", 
+                        icon: "fa-bed",
+                        transit: { text: "搭乘東京地鐵日比谷線 (約 40 分鐘) 返回上野飯店", icon: "fa-train-subway" }
+                    }
+                ]
+            },
+            {
+                day: "Day 2",
+                date: "09/26 (六)",
+                title: "北陸新幹線・神話戶隱五社自駕",
+                events: [
+                    { 
+                        time: "07:34 - 08:58", 
+                        title: "JR 北陸新幹線 (上野 ➔ 長野)", 
+                        desc: "早起出發！搭乘新幹線 Asama/Kagayaki 號高速奔向長野山林，欣賞沿途壯麗風光。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=JR+長野站", 
+                        icon: "fa-train" 
+                    },
+                    { 
+                        time: "09:00 - 09:20", 
+                        title: "長野站 NewDays 企鵝七味粉聯名", 
+                        desc: "抵達長野站！先在車站內 NewDays 尋找<b>「Suica 小企鵝 × 八幡屋礒五郎」</b>聯名款七味粉，並把行李寄放至車站北口的長野相鐵飯店！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=JR+長野站", 
+                        icon: "fa-pepper-hot",
+                        transit: { text: "出新幹線站閘門後，在車站內步行抵達", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "09:30 - 10:00", 
+                        title: "ORIX 租車 取車出發", 
+                        desc: "於長野站旁 ORIX 辦理取車手續（預約 09:30-19:00），開啟戶隱山區神聖自駕之行！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=ORIX+Rent-a-car+長野站前", 
+                        icon: "fa-car",
+                        transit: { text: "寄放完行李後，步行至車站旁的租車站取車", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "10:50 - 12:00", 
+                        title: "停車：戶隱神社 寶光社 ＆ 火之御子社", 
+                        desc: "<b>※自此開始全程徒步巡禮※</b><br>將車輛停放於寶光社停車場後，參拜壯麗肅穆的寶光社，再順遊守護藝能與良緣的火之御子社，開啟戶隱神道健行！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=戶隱神社+寶光社", 
+                        icon: "fa-torii-gate",
+                        transit: { text: "沿著戶隱神道步行前往中社", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "12:00 - 13:30", 
+                        title: "中社參拜 ＆ 戶隱名物蕎麥麵午餐", 
+                        desc: "步行抵達中社參拜，周圍匯聚了多家歷史悠久的戶隱蕎麥麵老店與紀念品店，在此悠閒享用午餐！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=戶隱神社+中社", 
+                        icon: "fa-bowl-food",
+                        transit: { text: "繼續步行前往奧社參道入口", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "13:30 - 15:30", 
+                        title: "奧社・九頭龍社與 400 年巨大杉木林步道", 
+                        desc: "沿著長約 2 公里的古老杉木參道步行入內，感受參天巨木與大自然的震撼心靈能量，抵達最深處的奧社！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=戶隱神社+奧社", 
+                        icon: "fa-tree",
+                        transit: { text: "沿著森林步道漫步前往鏡池", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "15:40 - 16:30", 
+                        title: "鏡池 (Kagami-ike Pond)", 
+                        desc: "宛如鏡面般清澈平靜的高山湖泊，完美倒映戶隱連峰的倒影，是放鬆心情、拍照散步的私房絕景！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=戶隱+鏡池", 
+                        icon: "fa-water",
+                        transit: { text: "徒步折返寶光社取車，接著開車下山約 45 分鐘返回長野市區", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "17:30 - 18:30", 
+                        title: "長野市區採買：Tsuruya 鶴屋超市 / Uniqlo", 
+                        desc: "前往長野在地人最愛的頂級連鎖超市 TSURUYA 採購信州名產果醬、果乾，並逛逛大型 Uniqlo 門市！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=TSURUYA+長野", 
+                        icon: "fa-cart-shopping",
+                        transit: { text: "19:00 前至租車站還車後，轉乘或步行前往餐廳", icon: "fa-train-subway" }
+                    },
+                    { 
+                        time: "19:15", 
+                        title: "晚餐：すき楼 (Suki-rou) 和牛壽喜燒", 
+                        desc: "位於長野本鄉站附近的頂級老牌壽喜燒專賣店！品嚐入口即化的頂級信州牛與濃郁甘甜的傳統醬汁。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=すき楼+長野", 
+                        icon: "fa-utensils" 
+                    }
+                ]
+            },
+            {
+                day: "Day 3",
+                date: "09/27 (日)",
+                title: "善光寺朝聖 / 進入浪漫輕井澤",
+                events: [
+                    { 
+                        time: "07:30 - 08:30", 
+                        title: "早餐：COTO CAFÉ", 
+                        desc: "早起散步到長野人氣文青小店 COTO CAFÉ，享受溫暖手作咖啡與豐盛朝食早午餐（營業時間 07:00-10:00）。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=COTO+CAFE+長野", 
+                        icon: "fa-coffee" 
+                    },
+                    { 
+                        time: "09:00 - 11:30", 
+                        title: "國寶 善光寺參拜 ＆ 表參道漫步", 
+                        desc: "走過仁王門與山門，前往本堂體驗深具意義的「戒壇巡禮」。<br>必訪：<b>八幡屋礒五郎本店</b>（挑選專屬七味粉）、<b>善光寺郵局</b>（購買特製明信片蓋日期風景印章！）。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=善光寺", 
+                        icon: "fa-bell",
+                        transit: { text: "吃完早餐，走表參道漫步前往善光寺 (約 30 分鐘)", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "13:26 - 13:56", 
+                        title: "JR 北陸新幹線 (長野 ➔ 輕井澤)", 
+                        desc: "搭乘新幹線只要 30 分鐘，瞬間抵達涼爽宜人的避暑勝地輕井澤！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=輕井澤站", 
+                        icon: "fa-train",
+                        transit: { text: "搭公車或步行返回長野站拿取行李，搭乘新幹線", icon: "fa-suitcase" }
+                    },
+                    { 
+                        time: "13:56", 
+                        title: "抵達輕井澤站 ＆ The Prince 尊榮禮賓託運", 
+                        desc: "✨ <b>享受最高等級住宿隱藏特權：</b><br>出站後至南口出口右側（步行1分鐘）的<b>「Smile Concierge 微笑禮賓中心」</b>，直接辦理免費行李託運直送客房，不用拖著大行李箱等車！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=The+Prince+Karuizawa", 
+                        icon: "fa-bell-concierge",
+                        transit: { text: "抵達輕井澤出站後，步行 1 分鐘至行李服務中心交給專人", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "14:30 - 17:30", 
+                        title: "舊輕井澤森林騎行 ＆ 銀座通商店街", 
+                        desc: "於車站北口租借自行車。<br>路線：<b>舊三笠飯店 ➔ 聖保羅天主教堂 ➔ 舊輕井澤銀座商店街 ➔ 雲場池（天鵝湖）</b>。<br>必吃必買：澤屋 (Sawaya) 草莓果醬、Paomu 布丁、白樺堂洋菓子與在地精釀啤酒！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=舊輕井澤銀座通", 
+                        icon: "fa-bicycle",
+                        transit: { text: "兩手空空前往北口租借自行車，騎車前往舊輕井澤區", icon: "fa-bicycle" }
+                    },
+                    { 
+                        time: "18:00", 
+                        title: "入住：The Prince Karuizawa (輕井澤王子大飯店)", 
+                        desc: "豪華花園雙床房 (Deluxe Garden Twin)。被群山與平靜湖水環抱的頂級度假勝地，沈澱身心靈。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=The+Prince+Karuizawa", 
+                        icon: "fa-bed",
+                        transit: { text: "還完自行車後，搭乘王子渡假區棕線循環巴士（約 20 分鐘）直達飯店", icon: "fa-bus" }
+                    },
+                    { 
+                        time: "19:00", 
+                        title: "晚餐：飯店主廚精緻法式晚宴 (Beaux Sejours)", 
+                        desc: "✨ <b>已預約 19:00 晚宴（預訂代號：4MFACK）</b><br>於飯店湖畔景觀法式餐廳 Beaux Sejours 享用專屬頂級晚宴，感受燭光與湖畔倒影相伴的浪漫夜色。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Beaux+Sejours+Karuizawa", 
+                        icon: "fa-champagne-glasses",
+                        transit: { text: "在飯店內散步前往餐廳", icon: "fa-person-walking" }
+                    }
+                ]
+            },
+            {
+                day: "Day 4",
+                date: "09/28 (一)",
+                title: "中輕井澤森林浴・星野度假區漫遊",
+                events: [
+                    { 
+                        time: "08:00 - 09:30", 
+                        title: "晨光法式早餐 (Beaux Sejours)", 
+                        desc: "望著晨光灑落在輕井澤美麗的森林綠意與湖面上，悠閒享用優雅健康的精緻早餐。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=The+Prince+Karuizawa", 
+                        icon: "fa-mug-saucer" 
+                    },
+                    { 
+                        time: "10:15 - 12:30", 
+                        title: "中輕井澤雙教堂：石之教堂 ＆ 高原教堂", 
+                        desc: "走訪石頭與玻璃有機堆疊的「石之教堂 (內村鑑三紀念堂)」，以及充滿木質溫暖香氣的「輕井澤高原教堂」，宛如走入童話森林般的靜謐洗禮。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=石之教堂", 
+                        icon: "fa-church",
+                        transit: { text: "搭乘飯店接駁車至輕井澤車站，轉乘西武巴士（約 20 分鐘）至星野區", icon: "fa-bus" }
+                    },
+                    { 
+                        time: "12:30 - 14:00", 
+                        title: "午餐：村民食堂 (或 川上庵蕎麥麵)", 
+                        desc: "建議可先至現場或線上掃 QR Code 抽取號碼牌！品嚐信州在地食材製作的和定食料理，或是漫步至川上庵品嚐外酥內嫩的招牌炸蝦天婦羅蕎麥麵。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=村民食堂", 
+                        icon: "fa-bowl-rice",
+                        transit: { text: "在星野區內悠閒散步前往餐廳", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "14:00 - 16:30", 
+                        title: "榆樹街小鎮 (Harunire Terrace) 散策", 
+                        desc: "在沿著清溪建立的木棧道商圈悠閒散步。<br>推薦造訪：<b>丸山珈琲本店</b>品嚐世界級手沖咖啡、<b>Sawamura 澤村麵包</b>，以及 <b>HARVEST NAGAI FARM</b> 香濃冰淇淋與純濃葡萄汁！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=榆樹街小鎮", 
+                        icon: "fa-store",
+                        transit: { text: "吃飽後步行前往榆樹街小鎮", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "19:00", 
+                        title: "晚餐：頂級主廚晚宴 (Beaux Sejours 第二夜)", 
+                        desc: "✨ <b>已預約 19:00 晚宴（預約 ID：Y3NXQ3）</b><br>第二晚的主廚特製晚餐，在柔和的爵士樂與星空湖畔邊，再次沉醉於精湛的法式味覺藝術中。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Beaux+Sejours+Karuizawa", 
+                        icon: "fa-utensils",
+                        transit: { text: "搭乘西武巴士返回輕井澤車站，轉乘飯店接駁車回飯店", icon: "fa-bus" }
+                    }
+                ]
+            },
+            {
+                day: "Day 5",
+                date: "09/29 (二)",
+                title: "輕井澤血拚・重返東京與銀座燒鳥之夜",
+                events: [
+                    { 
+                        time: "08:30", 
+                        title: "早餐：退房前晨間饗宴 (Beaux Sejours)", 
+                        desc: "✨ <b>已預約 08:30 早餐（預約 ID：236FGP）</b><br>享用在輕井澤的最後一次優雅早餐，收拾行李辦理退房手續。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=The+Prince+Karuizawa", 
+                        icon: "fa-mug-hot" 
+                    },
+                    { 
+                        time: "10:00 - 13:30", 
+                        title: "輕井澤王子購物廣場 (Karuizawa Prince Outlet)", 
+                        desc: "全日本最美麗的湖畔渡假 Outlet！各大國際精品、戶外運動名牌、潮流服飾應有盡有，把握時間採買戰利品！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=輕井澤王子購物廣場", 
+                        icon: "fa-bag-shopping",
+                        transit: { text: "退房後，搭乘飯店接駁車直達購物廣場", icon: "fa-bus" }
+                    },
+                    { 
+                        time: "13:57 - 15:12", 
+                        title: "JR 北陸新幹線 (輕井澤 ➔ 東京)", 
+                        desc: "搭乘新幹線高速返回繁華的東京心臟地帶（東京車站）。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=JR+東京站", 
+                        icon: "fa-train",
+                        transit: { text: "買完東西後，步行至旁邊的輕井澤新幹線月台搭車", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "15:20 - 16:00", 
+                        title: "東京車站 Pensta ＆ 入住銀座京橋大和 Roynet", 
+                        desc: "抵達東京車站先去 Suica 企鵝專賣店補貨，接著漫步前往入住<b>「Daiwa Roynet Hotel Tokyo Kyobashi」</b>放行李！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Tokyo+Kyobashi", 
+                        icon: "fa-hotel",
+                        transit: { text: "抵達東京車站，採買後步行前往飯店寄放行李", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "16:30 - 18:30", 
+                        title: "丸之內 / 有樂町 LE TALON 美鞋採購", 
+                        desc: "造訪優雅日本女性最愛的精緻女鞋品牌 LE TALON，挑選兼具舒適度與設計感的高跟鞋。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=LE+TALON+有樂町", 
+                        icon: "fa-shoe-prints",
+                        transit: { text: "放完行李後，輕鬆散步前往有樂町商圈", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "18:45 - 20:30", 
+                        title: "澀谷 PARCO：PUEBCO / Birkenstock 潮牌巡禮", 
+                        desc: "造訪潮流聖殿澀谷 PARCO 3樓的工業風美學生活選物店 PUEBCO，以及挑選心儀的 Birkenstock 勃肯美鞋！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=澀谷+PARCO", 
+                        icon: "fa-shirt",
+                        transit: { text: "搭乘地鐵前往澀谷", icon: "fa-train-subway" }
+                    },
+                    { 
+                        time: "21:00", 
+                        title: "晚餐：銀座 燒鳥 Katou (Ginza Yakitori Kato)", 
+                        desc: "✨ <b>已預約 21:00 頂級燒鳥晚餐！</b><br>隱身於銀座的頂級串燒割烹名店，以炭火精準鎖住雞肉極致鮮嫩肉汁，為東京之夜畫下完美句點！", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Ginza+Yakitori+Kato", 
+                        icon: "fa-utensils",
+                        transit: { text: "搭乘地鐵銀座線，從澀谷返回銀座享用晚餐", icon: "fa-train-subway" }
+                    },
+                    { 
+                        time: "23:00", 
+                        title: "返回飯店休息", 
+                        desc: "帶著心滿意足的胃口與戰利品，準備回飯店打包行李。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Tokyo+Kyobashi", 
+                        icon: "fa-bed",
+                        transit: { text: "晚餐後悠閒步行返回京橋飯店", icon: "fa-person-walking" }
+                    }
+                ]
+            },
+            {
+                day: "Day 6",
+                date: "09/30 (三)",
+                title: "銀座晨光漫步 / 平安賦歸",
+                events: [
+                    { 
+                        time: "08:30 - 09:45", 
+                        title: "飯店退房 ＆ 銀座京橋晨間散策", 
+                        desc: "悠閒收拾大包小包滿滿的購物戰利品，辦理退房手續，漫步前往東京車站乘車。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=Daiwa+Roynet+Hotel+Tokyo+Kyobashi", 
+                        icon: "fa-suitcase" 
+                    },
+                    { 
+                        time: "10:03 - 10:54", 
+                        title: "JR 成田特快 N'EX (東京 ➔ 成田機場二航廈)", 
+                        desc: "搭乘舒適的 N'EX 特快列車直達機場，沿途確認隨身護照與伴手禮，準備登機手續。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=成田國際機場第二航廈", 
+                        icon: "fa-train",
+                        transit: { text: "退房後步行前往東京車站，搭乘 N'EX 特快列車", icon: "fa-train" }
+                    },
+                    { 
+                        time: "11:00 - 13:30", 
+                        title: "成田機場免稅店最後衝刺採買", 
+                        desc: "辦理託運行李與出境，在機場免稅店品嚐點心，採買最後的名產甜點（Royce生巧克力、東京香蕉等）。", 
+                        link: "https://www.google.com/maps/search/?api=1&query=成田機場第二航廈出境", 
+                        icon: "fa-cart-shopping",
+                        transit: { text: "抵達機場後，步行至出境大廳辦理報到", icon: "fa-person-walking" }
+                    },
+                    { 
+                        time: "13:35 - 16:40", 
+                        title: "搭機返台 (華航 CI0103 班機)", 
+                        desc: "搭乘華航 CI0103 班機返台！帶著滿滿信州山林的悠閒綠意、戶隱神社的靈氣、輕井澤的浪漫回憶平安落地，回到溫暖的家！✈️", 
+                        link: "", 
+                        icon: "fa-plane",
+                        transit: { text: "前往登機門準備登機", icon: "fa-plane-up" }
+                    }
+                ]
+            }
+        ];
+
+        let currentTab = 0;
+
+        function switchTab(index) {
+            currentTab = index;
+            renderTabs();
+            renderEvents();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderTabs() {
+            const tabsContainer = document.getElementById('tabs-container');
+            tabsContainer.innerHTML = '';
+            
+            itineraryData.forEach((day, index) => {
+                const isActive = index === currentTab;
+                const activeClasses = isActive 
+                    ? 'bg-white text-[#D97D64] shadow-sm font-semibold' 
+                    : 'text-[#8A8177] hover:bg-[#E5DFD3] hover:text-[#5D534A]';
+                
+                const btn = document.createElement('button');
+                btn.className = `flex-1 py-3 px-4 rounded-xl text-sm transition-all duration-300 whitespace-nowrap flex flex-col items-center ${activeClasses}`;
+                btn.onclick = () => switchTab(index);
+                
+                btn.innerHTML = `
+                    <span class="text-[1.05rem] mb-0.5 tracking-wide">${day.day}</span>
+                    <span class="text-[0.7rem] opacity-90">${day.date}</span>
+                `;
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        function renderEvents() {
+            const dayData = itineraryData[currentTab];
+            const titleIcon = document.getElementById('title-icon');
+            document.getElementById('day-title').innerText = dayData.title;
+            
+            const eventsContainer = document.getElementById('events-container');
+            const timelineLine = document.getElementById('timeline-line');
+            eventsContainer.innerHTML = '';
+            
+            if (dayData.isSummary) {
+                timelineLine.style.display = 'none';
+                titleIcon.className = "fa-solid fa-map-location-dot text-[#D97D64] text-xl";
+                
+                // 資訊卡
+                let infoHtml = `<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">`;
+                dayData.info.forEach(info => {
+                    infoHtml += `
+                        <div class="bg-[#F4F1EA] p-4 rounded-[1rem] border border-[#EBE6DC]">
+                            <h4 class="text-[#8F9E8B] font-bold text-sm mb-1"><i class="fa-solid ${info.icon} mr-1.5"></i>${info.label}</h4>
+                            <p class="text-[#6C635A] text-sm leading-relaxed">${info.text}</p>
+                        </div>
+                    `;
+                });
+                infoHtml += `</div>`;
+                eventsContainer.insertAdjacentHTML('beforeend', infoHtml);
+
+                // 必買清單專區
+                let mustBuyHtml = `
+                    <div class="bg-[#F6F3ED] p-5 rounded-[1.5rem] border border-[#EBE6DC] mb-8">
+                        <h3 class="font-bold text-[1.15rem] text-[#D97D64] mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-heart"></i> 女朋友與個人本次必買清單清單 (Must Buy)
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                `;
+                dayData.mustBuy.forEach(item => {
+                    mustBuyHtml += `
+                        <div class="flex items-center gap-2 text-sm text-[#6C635A] bg-white p-2.5 rounded-xl border border-[#EFEBE0]">
+                            <i class="fa-regular fa-circle-check text-[#8F9E8B]"></i>
+                            <span>${item}</span>
+                        </div>
+                    `;
+                });
+                mustBuyHtml += `</div></div>`;
+                eventsContainer.insertAdjacentHTML('beforeend', mustBuyHtml);
+
+                // 亮點卡
+                let highlightsHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6">`;
+                dayData.highlights.forEach((hl, index) => {
+                    highlightsHtml += `
+                        <div class="bg-white p-5 rounded-[1.5rem] border border-[#EFEBE0] shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group cursor-pointer" onclick="switchTab(${index+1})">
+                            <div class="absolute -right-6 -bottom-6 text-[#F9F6F0] opacity-50 group-hover:scale-110 transition-transform duration-500 z-0">
+                                <i class="fa-solid ${hl.icon} text-8xl"></i>
+                            </div>
+                            <div class="relative z-10">
+                                <h3 class="font-bold text-[1.15rem] text-[#D97D64] mb-2 tracking-wide flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-[#D97D64] text-white flex items-center justify-center text-sm shadow-sm"><i class="fa-solid ${hl.icon}"></i></div>
+                                    ${hl.dayTitle}
+                                </h3>
+                                <p class="text-[#8A8177] text-sm leading-relaxed">${hl.desc}</p>
+                                <div class="mt-4 text-[#8F9E8B] text-xs font-semibold flex items-center gap-1 group-hover:text-[#6E7C6A] transition-colors">
+                                    點擊查看當日詳細行程 <i class="fa-solid fa-arrow-right"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                highlightsHtml += `</div>`;
+                eventsContainer.insertAdjacentHTML('beforeend', highlightsHtml);
+
+            } else {
+                timelineLine.style.display = 'block';
+                titleIcon.className = "fa-solid fa-location-dot text-[#D97D64] text-xl";
+
+                dayData.events.forEach((event) => {
+                    let transitHtml = '';
+                    if (event.transit) {
+                        transitHtml = `
+                            <div class="relative flex items-center gap-4 sm:gap-6 my-2 sm:my-3 z-10">
+                                <div class="w-12 shrink-0 flex justify-center">
+                                    <i class="fa-solid fa-arrow-down-long text-[#DCCDBA] text-sm opacity-70"></i>
+                                </div>
+                                <div class="bg-[#F4F1EA] text-[#8C8276] border border-[#EBE6DC] shadow-sm px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+                                    <i class="fa-solid ${event.transit.icon} text-[#8F9E8B]"></i>
+                                    <span>${event.transit.text}</span>
+                                </div>
+                            </div>
+                        `;
+                        eventsContainer.insertAdjacentHTML('beforeend', transitHtml);
+                    }
+                    
+                    const linkClasses = event.link 
+                        ? "text-[#8F9E8B] hover:text-[#6E7C6A] bg-[#F1F4EE]" 
+                        : "text-[#BDB7AE] bg-[#F4F1EA] cursor-not-allowed";
+                    
+                    const linkText = event.link ? "Google Maps 導航" : "尚未新增連結";
+                    const linkTag = event.link 
+                        ? `<a href="${event.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl transition-colors ${linkClasses}"><i class="fa-solid fa-map-location-dot"></i> ${linkText}</a>`
+                        : `<span class="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl transition-colors ${linkClasses}"><i class="fa-solid fa-map-location-dot"></i> ${linkText}</span>`;
+
+                    const eventHtml = `
+                        <div class="relative flex items-start gap-4 sm:gap-6 group">
+                            <div class="flex items-center justify-center w-12 h-12 rounded-full border-[3px] border-[#F9F6F0] bg-[#D97D64] text-white shadow-sm shrink-0 relative z-10 transition-transform group-hover:scale-110 duration-300">
+                                <i class="fa-solid ${event.icon} text-lg"></i>
+                            </div>
+                            
+                            <div class="flex-1 bg-white p-5 rounded-[1.5rem] border border-[#EFEBE0] shadow-sm hover:shadow-md transition-shadow">
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="font-bold text-[#8F9E8B] text-sm bg-[#F1F4EE] px-2.5 py-1 rounded-lg">
+                                        <i class="fa-regular fa-clock mr-1"></i> ${event.time}
+                                    </span>
+                                </div>
+                                <h3 class="font-bold text-[1.15rem] text-[#6C635A] mb-2 tracking-wide">${event.title}</h3>
+                                <p class="text-[#8A8177] text-sm leading-relaxed mb-5">
+                                    ${event.desc}
+                                </p>
+                                ${linkTag}
+                            </div>
+                        </div>
+                    `;
+                    eventsContainer.insertAdjacentHTML('beforeend', eventHtml);
+                });
+            }
+            
+            renderBottomNav();
+        }
+
+        function renderBottomNav() {
+            const bottomNav = document.getElementById('bottom-nav-container');
+            bottomNav.innerHTML = '';
+
+            let prevBtnHtml = '<div class="w-[30%]"></div>'; 
+            if (currentTab > 0) {
+                const prevData = itineraryData[currentTab - 1];
+                const prevText = prevData.isSummary ? '大綱' : prevData.day;
+                prevBtnHtml = `
+                    <div class="w-[30%] flex justify-start">
+                        <button onclick="switchTab(${currentTab - 1})" class="flex items-center gap-2 text-[#8A8177] hover:text-[#D97D64] transition-colors font-semibold text-sm">
+                            <i class="fa-solid fa-chevron-left text-xs"></i> 回到${prevText}
+                        </button>
+                    </div>
+                `;
+            }
+
+            let nextBtnHtml = '<div class="w-[30%]"></div>'; 
+            if (currentTab < itineraryData.length - 1) {
+                const nextData = itineraryData[currentTab + 1];
+                nextBtnHtml = `
+                    <div class="w-[30%] flex justify-end">
+                        <button onclick="switchTab(${currentTab + 1})" class="flex items-center gap-2 bg-[#8F9E8B] text-white px-5 py-2.5 rounded-full hover:bg-[#788874] transition-colors shadow-sm font-semibold text-sm">
+                            前往 ${nextData.day} <i class="fa-solid fa-chevron-right text-xs"></i>
+                        </button>
+                    </div>
+                `;
+            }
+
+            let topBtnHtml = `
+                <div class="w-[40%] flex justify-center">
+                    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="flex flex-col items-center gap-1.5 text-[#DCCDBA] hover:text-[#D97D64] transition-colors font-semibold text-xs group">
+                        <div class="w-10 h-10 rounded-full border-[2px] border-[#DCCDBA] group-hover:border-[#D97D64] bg-white flex items-center justify-center transition-colors shadow-sm group-hover:shadow">
+                            <i class="fa-solid fa-arrow-up text-lg"></i>
+                        </div>
+                        <span class="tracking-wider">Top</span>
+                    </button>
+                </div>
+            `;
+
+            bottomNav.innerHTML = prevBtnHtml + topBtnHtml + nextBtnHtml;
+        }
+
+        renderTabs();
+        renderEvents();
+    </script>
+</body>
+</html>
